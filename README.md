@@ -67,3 +67,5 @@ Pengguna yang sudah login bisa lakukan lebih banyak hal. Mereka bisa unduh datas
 ![Tipe Akun](/Account%20Type%20Decision.png)
 ### Information Architecture User
 ![IA User](/Information%20Architecture%20User.png)
+### Information Architecture Admin
+![IA Admin](/Information%20Architecture%20Admin.png)
