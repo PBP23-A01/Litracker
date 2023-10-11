@@ -114,13 +114,23 @@ Fitur Rekomendasi Buku adalah salah satu fitur dalam Litracker yang dirancang un
 Fitur Review Buku memungkinkan pengguna untuk berbagi pandangan mereka tentang buku-buku yang telah mereka baca. Ini membantu pengguna lain dalam mengevaluasi buku sebelum memutuskan untuk membacanya. Halaman Review Buku adalah halaman khusus yang memungkinkan pengguna membuat ulasan dari suatu buku. Saat menulis ulasan, pengguna dapat memberikan peringkat berdasarkan jumlah bintang, memberikan judul ulasan, dan menulis ulasan mereka sendiri. Mereka dapat menyatakan opini mereka tentang plot, karakter, gaya penulisan, dan aspek-aspek lain dari buku tersebut.
 </details>
 
-<details><summary>5. Dashboard User</summary>
+<details><summary>5. Upvote Buku</summary>
+Fitur Upvote Buku memungkinkan pengguna untuk mendukung konten buku yang menarik minat bacanya. Dalam hal ini, ketika pengguna melakukan upvote, peringkat buku terpengaruh sehingga akan terupdate daftar buku yang ditampilkan. 
+</details>
+
+<details><summary>6. Dashboard User</summary>
 
 a. Favorite book
 Fitur "Favorite Book" pada Litracker membantu pengguna untuk lebih baik mengelola minat literasi mereka, menyediakan akses cepat ke buku-buku yang mereka sukai. Fitur ini memungkinkan pengguna untuk menyimpan dan mengatur buku-buku yang mereka favoritkan atau yang ingin mereka baca nanti.
 
 b. Profile
 Fitur ini Pengguna dapat mengelola dan memperbarui informasi pribadi mereka, seperti nama, alamat email, foto profil.
+
+c. Upvote History
+Pengguna mendapat pembaruan terhadap aktivitas upvote yang ia lakukan. Dalam hal ini, pengguna bisa mengecek kekeliruan maupun mengupdate pembaruan yang terjadi.
+
+d. Reading History
+Pengguna dapat melihhat buku yang terakhir kali dibaca. Dalam hal ini, delete mengizinkan pengguna untuk menyembunyikan hasil bacaan jika diperlukan.
 </details>
 
 
