@@ -1,13 +1,13 @@
 # Litracker 
 
-PBP A - Kelompok A01
+`PBP A - Kelompok A01`
 
 ### Anggota 👨‍💻👩‍💻:
-1. Muhammad Fawwaz Arshad Said
-2. Anindya Maulida Widyatmoko
-3. Haffie Noorcahyo
-4. Henry Soedibjo
-5. Muhammad Daffa Grahito Triharsanto
+1. Anindya Maulida Widyatmoko - 2206082915
+2. Henry Soedibjo - 2206827762
+3. Muhammad Fawwaz Arshad Said - 2206082511
+4. Haffie Noorcahyo - 2206081515
+5. Muhammad Daffa Grahito Triharsanto - 2206820075
 
 ## Cerita Aplikasi dan Manfaat 💻
 **Litracker** adalah sebuah platform pendidikan digital yang berfokus pada peningkatan literasi siswa. Dilengkapi dengan fitur-fitur seperti autentikasi, rekomendasi buku yang disesuaikan, buku favorit, ulasan buku, dan pencarian buku yang canggih, Litracker bertujuan untuk membantu siswa menjelajahi, memahami, dan meningkatkan kemampuan literasi mereka secara interaktif dan mendidik. Dengan Litracker, pengguna dapat dengan mudah menemukan buku-buku sesuai minat mereka, memberikan ulasan, serta melacak dan meningkatkan kemampuan literasi mereka. 
