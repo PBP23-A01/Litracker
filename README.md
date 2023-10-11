@@ -57,17 +57,20 @@ Admin memiliki kontrol penuh atas Litracker yang dapat  bisa mengubah, memperbar
 2. Guest user
 Guest user adalah pengunjung yang mengunjungi Litracker tanpa melakukan otentikasi atau login. Guest user dapat melakukan penelusuran dan menggunakan fitur Litracker seperti melihat info, mencari buku, baca rekomendasi, dan lihat ulasan. Namun, tidak memiliki akses untuk memberi ulasan atau tandai buku sebagai favorit tanpa login.
 
-
 3. Logged in user
 Pengguna yang sudah login bisa lakukan lebih banyak hal. Mereka bisa unduh dataset, beri penilaian, tulis ulasan, dan berinteraksi dengan komunitas. Pengguna yang sudah login juga bisa akses fitur tambahan sesuai dengan aturan platform. Mereka juga bisa ikuti update dataset, bagikan dataset, atau simpan dataset favorit.
 
 
 ## Diagram Web Flow Akun
 ### Memilih tipe akun saat masuk pertama kali
+Pengunjung pertama kali akan memasuki landing page yang berisi rekomendasi buku. Dalam hal ini, ketika pengunjung melakukan aksi login, pengunjung akan dialihkan ke tipe masing-masing akun.
 ![Tipe Akun](/Account%20Type%20Decision.png)
 ### Information Architecture Guest
+Pengunjung memiliki akses yang sangat terbatas. Pengunjung yang melakukan suatu aksi pada laman yang tidak mendapat izin akses akan dialihkan ke laman login.
 ![IA Guest](/Information%20Architecture%20Guest.png) 
 ### Information Architecture User
+Pengunjung yang sudah login bisa menikmati akses Litracker. Adapun aksi CRUD yang bisa diterima antara lain:
 ![IA User](/Information%20Architecture%20User.png)
 ### Information Architecture Admin
+Akun admin difokuskan ke dalam manajemen akun sehingga akses dashboard terhadap manajemen akun user dan kumpulan buku akan diizinkan.
 ![IA Admin](/Information%20Architecture%20Admin.png) 
