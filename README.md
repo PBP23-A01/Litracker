@@ -62,15 +62,27 @@ Pengguna yang sudah login bisa lakukan lebih banyak hal. Mereka bisa unduh datas
 
 
 ## Diagram Web Flow Akun
-### Memilih tipe akun saat masuk pertama kali
+
+<details><summary>Memilih tipe akun saat masuk pertama kali</summary>
 Pengunjung pertama kali akan memasuki landing page yang berisi rekomendasi buku. Dalam hal ini, ketika pengunjung melakukan aksi login, pengunjung akan dialihkan ke tipe masing-masing akun.
+</details>
+
 ![Tipe Akun](/Account%20Type%20Decision.png)
-### Information Architecture Guest
+
+<details><summary>Information Architecture Guest</summary>
 Pengunjung memiliki akses yang sangat terbatas. Pengunjung yang melakukan suatu aksi pada laman yang tidak mendapat izin akses akan dialihkan ke laman login.
+</details>
+
 ![IA Guest](/Information%20Architecture%20Guest.png) 
-### Information Architecture User
+
+<details><summary>Information Architecture User</summary>
 Pengunjung yang sudah login bisa menikmati akses Litracker. Adapun aksi CRUD yang bisa diterima antara lain:
+</details>
+
 ![IA User](/Information%20Architecture%20User.png)
-### Information Architecture Admin
+
+<details><summary>Information Architecture Admin</summary>
 Akun admin difokuskan ke dalam manajemen akun sehingga akses dashboard terhadap manajemen akun user dan kumpulan buku akan diizinkan.
+</details>
+
 ![IA Admin](/Information%20Architecture%20Admin.png) 
