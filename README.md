@@ -19,3 +19,9 @@ Manfaat besar dari platform ini adalah dalam meningkatkan minat literasi di Indo
 ## Sumber dataset katalog buku 
 
 ## Role dan Peran Pengguna
+
+## Diagram Web Flow Akun
+### Memilih tipe akun saat masuk pertama kali
+![Tipe Akun](/Account%20Type%20Decision.png)
+### Information Architecture User
+![IA User](/Information%20Architecture%20User.png)
