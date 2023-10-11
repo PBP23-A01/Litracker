@@ -22,6 +22,8 @@ Manfaat besar dari platform ini adalah dalam meningkatkan minat literasi di Indo
 
 ## Diagram Web Flow Akun
 ### Memilih tipe akun saat masuk pertama kali
-![Tipe Akun](/Account%20Type%20Decision.png)
+![Tipe Akun](/Litracker/Account%20Type%20Decision.png)
 ### Information Architecture User
-![IA User](/Information%20Architecture%20User.png)
+![IA User](/Litracker/Information%20Architecture%20User.png)
+### Information Architecture Admin
+![IA Admin](/Litracker/Information%20Architecture%20Admin.png)
