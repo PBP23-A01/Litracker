@@ -14,8 +14,10 @@ def show_review(request):
 
 def get_books(request):
     data = Book.objects.all()
-    return HttpResponse(serializers.serialize("json", data), 
-                        content_type="application/json")
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def add_review(request):
+    return render(request, 'add_review.html')
 
 
 
