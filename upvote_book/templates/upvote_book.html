@@ -50,11 +50,7 @@
         </div>
     </nav>
 
-    <div class="dashboard">
-        <div class="col-4" style="background-color: white; height: 100px;">
     
-        </div>
-    </div>
 </div>
 
 <!-- Mobile Navbar -->
@@ -77,7 +73,82 @@
     </nav>
 </div>
 
+<div class="container-fluid d-flex flex-row  p-5 " style="margin-top: 80px; min-height: 1000px;">
+    <div class="col-3 d-flex">
+    </div>
+    <div class="col-3 d-flex flex-column p-5 align-items-start position-fixed" style="background-color: white;  border-radius: 32px; margin-right: 20px; ">
+        <img src="{% static 'icon/user grey.png' %}" alt="user" style="padding: 16px; height: 80px; width: 80px; background-color: var(--kashmir-blue-100); border-radius: 20px;">
+        <div class="text-xl-black py-3">Halo, Mumu</div>
+        <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
+            <img src="{% static 'icon/upvote blue.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: var(--jaguar-100); border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-black">Upvoting</div>
+        </div>
+        <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
+            <img src="{% static 'icon/love grey.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: white; border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-grey">Wishlist</div>
+        </div>
+    </div>
+    
+    <div class="col-9 d-flex p-5 flex-column" style="background-color: white;  border-radius: 40px; margin-left: 40px;">
+        <div class="text-2xl-black">List Upvote Kamu</div>
+        <div class="py-5" style="background-color: white;">
+            <div class="card mb-4 p-5 d-flex flex-row" style="border-radius: 20px; border-color: var(--kashmir-blue-200); background-color: white;">
+                <img src="{% static 'icon/book dummy.png' %}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
+                <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
+                    <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                        <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                            <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                            9
+                        </div>
+                        <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                            <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                            <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">177 Votes</p>
+                        </div>
+                    </div>
+                    <div class="about d-flex flex-column" style="background-color: white;">
+                        <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">The Last Four Things</p>
+                        <p style="margin-bottom: 0px; background-color: white;">Paul Hoffman</p>
+                    </div>
 
+                    <div class="action" style="background-color: white;">
+                        <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                            Batalkan Vote
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="py-5" style="background-color: white;">
+            <div class="card mb-4 p-5 d-flex flex-row" style="border-radius: 20px; border-color: var(--kashmir-blue-200); background-color: white;">
+                <img src="{% static 'icon/book dummy.png' %}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
+                <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
+                    <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                        <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                            <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                            9
+                        </div>
+                        <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                            <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                            <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">177 Votes</p>
+                        </div>
+                    </div>
+                    <div class="about d-flex flex-column" style="background-color: white;">
+                        <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">The Last Four Things</p>
+                        <p style="margin-bottom: 0px; background-color: white;">Paul Hoffman</p>
+                    </div>
+
+                    <div class="action" style="background-color: white;">
+                        <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                            Batalkan Vote
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
