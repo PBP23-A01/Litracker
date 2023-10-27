@@ -7,7 +7,7 @@
 
 <!-- Desktop Navbar -->
 <div class="desktop">
-    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 80px; padding-block: 40px;">
+    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 80px; padding-block: 20px;">
         <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
             <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
             <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
@@ -19,8 +19,11 @@
                 <div class="nav-text-secondary">Ulasan</div>
             </div>
         </div>
-        <div class="container-fluid w-100 h-100" style="background-color: white;">
-         
+        <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
+            <div class="search w-100 d-flex flex-row align-items-center justify-content-start px-2" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px;">
+                <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
+                <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-400);">Search</div>
+            </div>
         </div>
         <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
             <div class="vertical-line"></div>
@@ -37,6 +40,12 @@
             </div>
         </div>
     </nav>
+
+    <div class="dashboard">
+        <div class="col-4" style="background-color: white; height: 100px;">
+    
+        </div>
+    </div>
 </div>
 
 <!-- Mobile Navbar -->
@@ -58,6 +67,7 @@
         </div>
     </nav>
 </div>
+
 
 
 
