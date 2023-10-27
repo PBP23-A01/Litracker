@@ -4,23 +4,61 @@
 
 
 {% load static %}
-<!-- <img src="{% static 'img/example.jpeg' %}" alt="My image"> -->
 
-<!-- <img src="{% static 'icon/fire grey.png' %}" alt="My image"> -->
-<nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-middle" style="background-color: white; height: 140px; padding-inline: 80px; padding-block: 40px;">
-    <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-middle" style="background-color: white;"> 
-        <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
-        <div class="container-fluid d-flex flex-row h-100 align-middle justify-content-start" style="background-color: white;">
-            <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px;">
+<!-- Desktop Navbar -->
+<div class="desktop">
+    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 80px; padding-block: 40px;">
+        <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
+            <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
+                <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                <div class="nav-text-primary d-flex">Rekomendasi Buku</div>
+            </div>
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+                <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                <div class="nav-text-secondary">Ulasan</div>
+            </div>
         </div>
-    </div>
-    <div class="container-fluid w-100 h-100" style="background-color: green;">
-    
-    </div>
-    <div class="container-fluid col-lg-5 h-100" style="">
-    
-    </div>
-</nav>
+        <div class="container-fluid w-100 h-100" style="background-color: white;">
+         
+        </div>
+        <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
+            <div class="vertical-line"></div>
+            <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);">
+            </div>
+            <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+            </div>
+            <div class="vertical-line"></div>
+            <div class="nav-text-secondary" style="margin-right: 20px;">Halo, Mumu</div>
+            <div class="user" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--kashmir-blue-100); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/user grey.png' %}" alt="user" style="height: 24px; width: 24px; background-color: var(--kashmir-blue-100);">
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Mobile Navbar -->
+<div class="mobile">
+    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 28px; padding-block: 20px;">
+        <div class="container-fluid col-2 d-flex justify-content-start align-items-center h-100 g-0" style="background-color: white;" >
+            <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; width: 40px; height: 40px;">
+        </div>
+        <div class="container-fluid col-8 d-flex justify-content-center align-items-center h-100 g-0" style="background-color: white;">
+            <div class="upvote" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 20px; width: 20px; background-color: var(--jaguar-600);">
+            </div>
+            <div class="wishlist" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 20px; width: 20px; background-color: var(--coral-red-400);">
+            </div>
+        </div>
+        <div class="container-fluid col-2 d-flex justify-content-end align-items-center h-100 g-0" style="background-color: white;">
+            <img src="{% static 'icon/menu.png' %}" alt="menu" style="height: 24px; width: 24px; background-color: white;">
+        </div>
+    </nav>
+</div>
+
 
 
 
