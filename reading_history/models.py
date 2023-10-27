@@ -1,11 +1,11 @@
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import User
+from authentication.models import UserProfile
+from book.models import Book
 
 # Create your models here.
-# Create your models here.
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # image = models.ImageField(default="default.png", null=True, blank=True)
-    is_admin = models.BooleanField(default=False)
-    is_user = models.BooleanField(default=False)
+class ReadingHistory(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    last_page = models.PositiveIntegerField(default=0)
+    date_opened = models.DateField(auto_now_add=True)
