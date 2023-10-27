@@ -2,6 +2,7 @@
 
 *{
     font-family: Poppins;
+    background-color: var(--kashmir-blue-100);
     
 }
 
@@ -28,5 +29,16 @@
     --kashmir-blue-800: #394453;
     --kashmir-blue-900: #333b47;
     --kashmir-blue-950: #22272f;
-
+    --coral-red-50: #fff1f1;
+    --coral-red-100: #ffe1e1;
+    --coral-red-200: #ffc7c7;
+    --coral-red-300: #ffa0a0;
+    --coral-red-400: #ff5050;
+    --coral-red-500: #f83b3b;
+    --coral-red-600: #e51d1d;
+    --coral-red-700: #c11414;
+    --coral-red-800: #a01414;
+    --coral-red-900: #841818;
+    --coral-red-950: #480707;
+    --orange-yellow: linear-gradient(180deg, rgba(255,199,56,1) 0%, rgba(241,141,48,1) 100%);
 }
