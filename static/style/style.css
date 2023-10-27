@@ -42,3 +42,25 @@
     --coral-red-950: #480707;
     --orange-yellow: linear-gradient(180deg, rgba(255,199,56,1) 0%, rgba(241,141,48,1) 100%);
 }
+
+.nav-text-primary {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--jaguar-950);
+    background-color: white;
+}
+
+.nav-text-secondary {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--kashmir-blue-600);
+    background-color: white;
+}
+
+.vertical-line{
+    height: 32px;
+    border-radius: 100%;
+    width: 2px;
+    margin-right: 20px;
+    background-color: var(--kashmir-blue-200);
+}
