@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: Poppins;
+    
+}
+
+:root {
+    --jaguar-50: #eaedff;
+    --jaguar-100: #d9ddff;
+    --jaguar-200: #babfff;
+    --jaguar-300: #9195ff;
+    --jaguar-400: #6e65ff;
+    --jaguar-500: #5c42ff;
+    --jaguar-600: #5121ff;
+    --jaguar-700: #4816ec;
+    --jaguar-800: #3a15be;
+    --jaguar-900: #331a95;
+    --jaguar-950: #080416;
+    --kashmir-blue-50: #f6f7f9;
+    --kashmir-blue-100: #eceff2;
+    --kashmir-blue-200: #d5dbe2;
+    --kashmir-blue-300: #b0bbc9;
+    --kashmir-blue-400: #8497ac;
+    --kashmir-blue-500: #657a92;
+    --kashmir-blue-600: #586b84;
+    --kashmir-blue-700: #425062;
+    --kashmir-blue-800: #394453;
+    --kashmir-blue-900: #333b47;
+    --kashmir-blue-950: #22272f;
+
+}
