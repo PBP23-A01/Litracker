@@ -1,8 +1,23 @@
+
 from django.shortcuts import render
+from book.models import Book
+from django.core import serializers
+from django.http import HttpResponse
 
 # Create your views here.
 def show_review(request):
-    return render(request, "review_book.html")
+    books =Book.objects.all()
+    context = {
+        'books': books
+    }
+    return render(request, "review_book.html", context)
+
+def get_books(request):
+    data = Book.objects.all()
+    return HttpResponse(serializers.serialize("json", data), 
+                        content_type="application/json")
+
+
 
 # from django.shortcuts import render, redirect
 # from .models import ReviewBook
