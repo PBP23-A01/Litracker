@@ -3,10 +3,269 @@
 {% load static %}
 
 {% block content %}
-<h1>Selamat datang di Litracker</h1>
-<ul>
-  {% for book in books %}
-    <li>{{ book.title }}</li>
-  {% endfor %}
-</ul>
+
+<!-- Desktop Navbar -->
+<div class="desktop">
+  <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 40px; padding-block: 20px;">
+      <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
+          <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
+              <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <div class="nav-text-primary d-flex">Rekomendasi Buku</div>
+          </div>
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+              <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <div class="nav-text-secondary">Ulasan</div>
+          </div>
+      </div>
+      <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
+          <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
+              <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
+              <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
+              <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
+          </div>
+      </div>
+      <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
+          <div class="vertical-line"></div>
+          <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);">
+          </div>
+          <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+          </div>
+          <div class="vertical-line"></div>
+
+          <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
+              Halo, Mumu
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Acount Info</a></li>
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+          </ul>
+
+
+          <div class="user" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--kashmir-blue-100); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/user grey.png' %}" alt="user" style="height: 24px; width: 24px; background-color: var(--kashmir-blue-100);">
+          </div>
+      </div>
+  </nav>
+
+  
+</div>
+
+<!-- Mobile Navbar -->
+<div class="mobile">
+  <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 28px; padding-block: 20px;">
+      <div class="container-fluid col-2 d-flex justify-content-start align-items-center h-100 g-0" style="background-color: white;" >
+          <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; width: 40px; height: 40px;">
+      </div>
+      <div class="container-fluid col-8 d-flex justify-content-center align-items-center h-100 g-0" style="background-color: white;">
+          <div class="upvote" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 20px; width: 20px; background-color: var(--jaguar-600);">
+          </div>
+          <div class="wishlist" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 20px; width: 20px; background-color: var(--coral-red-400);">
+          </div>
+      </div>
+      <div class="container-fluid col-2 d-flex justify-content-end align-items-center h-100 g-0" style="background-color: white;">
+          <img src="{% static 'icon/menu.png' %}" alt="menu" style="height: 24px; width: 24px; background-color: white;">
+      </div>
+  </nav>
+</div>
+
+<div class="type-text  w-100  d-flex flex-column" style=" background-color: var(--kashmir-blue-100); padding-top: 120px;">
+  <div class="d-flex container-fluid g-0 justify-content-center" style="background-color: var(--kashmir-blue-100);">
+    <svg class="book-shelf" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 84 94" height="200" width="200">
+      <path fill="none" d="M37.612 92.805L4.487 73.71c-2.75-1.587-4.45-4.52-4.45-7.687L.008 27.877c-.003-3.154 1.676-6.063 4.405-7.634L37.558 1.167c2.73-1.57 6.096-1.566 8.835.013l33.124 19.096c2.75 1.586 4.45 4.518 4.45 7.686l.028 38.146c.002 3.154-1.677 6.063-4.406 7.634L46.445 92.818c-2.73 1.57-6.096 1.566-8.834-.013z"/>
+      <g class="book-shelf__book book-shelf__book--one" fill-rule="evenodd">
+        <path fill="#BABFFF" d="M49 32h2c1.105 0 2 .86 2 1.92v25.906c0 1.06-.895 1.92-2 1.92h-2c-1.105 0-2-.86-2-1.92V33.92c0-1.06.895-1.92 2-1.92z"/>
+        <path fill="#ffffff" d="M50 35c.552 0 1 .448 1 1v2c0 .552-.448 1-1 1s-1-.448-1-1v-2c0-.552.448-1 1-1z"/>
+        </g>
+      <g class="book-shelf__book book-shelf__book--two" fill-rule="evenodd">
+        <path fill="#5121FF" d="M39 34h6c1.105 0 2 .895 2 2v24c0 1.105-.895 2-2 2h-6c-1.105 0-2-.895-2-2V36c0-1.105.895-2 2-2z"/>
+        <path fill="#ffffff" d="M42 38c1.105 0 2 .895 2 2s-.895 2-2 2-2-.895-2-2 .895-2 2-2z"/>
+      </g>
+      <g class="book-shelf__book book-shelf__book--three" fill-rule="evenodd">
+        <path fill="#FF5050" d="M31 29h4c1.105 0 2 .895 2 2v29c0 1.105-.895 2-2 2h-4c-1.105 0-2-.895-2-2V31c0-1.105.895-2 2-2z"/>
+        <path fill="#ffffff" d="M34 36h-2c-.552 0-1-.448-1-1s.448-1 1-1h2c.552 0 1 .448 1 1s-.448 1-1 1zm-2 1h2c.552 0 1 .448 1 1s-.448 1-1 1h-2c-.552 0-1-.448-1-1s.448-1 1-1z"/>
+      </g>
+      <g fill-rule="evenodd">
+        <path class="book-shelf__shelf" fill="#8497AC" d="M21 60h40c1.105 0 2 .895 2 2s-.895 2-2 2H21c-1.105 0-2-.895-2-2s.895-2 2-2z"/>
+        <path fill="#586B84" d="M51.5 67c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5zm-21 0c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="animate-text d-flex flex-row g-0 w-100 justify-content-center">
+    <span id="text"></span>
+    <span id="cursor" style="color: white;">|</span>
+  </div>
+
+  <div class="h-100 container-fluid w-100" style="height: 100px; background-color: white; margin-top: 80px; border-radius: 60px 60px 0px 0px; padding: 60px;">
+    <p style="font-size: 20px; background-color: white;">Buku Paling Populer</p>
+
+    <div class="container-fluid row h-100 g-0 w-100 justify-content-between" style="background-color: white;">
+
+      {% for book in books %}
+      <div class="py-4 col-xl-3 col-lg-12 align-items-center justify-content-between" style="background-color: white; margin-right: 4px; width: 380px;">
+        <div class="card mb-4 p-4 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
+          
+            <img src="{{ book.image_url_l }}" alt="user" style="width: 100px; height: 100%; margin-right: 40px;">
+            <div class="content-card d-flex flex-column justify-content-between" style="background-color: white;">
+                <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                    <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                        <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                        9
+                    </div>
+                    <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                        <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;">177 Votes</p>
+                    </div>
+                </div>
+                <div class="about d-flex flex-column" style="background-color: white;">
+                    <p id="truncatedText" style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700; 
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 200px;">{{ book.title }}</p>
+                    <p style="margin-bottom: 0px; background-color: white; font-size: 14px; font-weight: 500;">{{ book.author }}</p>
+                </div>
+
+                <div class="action" style="background-color: white;">
+                    <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                        Lihat Detail
+                    </button>
+                </div>
+                
+            </div>
+          
+        </div>
+        
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  
+</div>
+
+
+
+
+
+<style>
+  body {
+  background-color: #f5f5f1;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes book-bounce {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  80% { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes shelf-lift {
+  0% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(-4px) rotate(10deg); }
+  40% { transform: translateY(-4px) rotate(0); }
+  40% { transform: translateY(-4px) rotate(-10deg); }
+  80% { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+.book-shelf:hover {
+  cursor: pointer;
+  
+  .book-shelf__book {
+    animation: book-bounce 0.4s ease;
+    animation-iteration-count: 1;
+  }
+  
+  .book-shelf__book--two {
+    animation-delay: 0.04s;
+  }
+
+  .book-shelf__book--three {
+    animation-delay: 0.08s;
+  }
+  
+  .book-shelf__shelf {
+    animation: shelf-lift 0.4s ease;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+  }
+}
+
+</style>
+ 
+
+
+<style>
+  .type-text {
+    font-size: 64px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#cursor {
+    animation: cursor 2s infinite;
+}
+
+@keyframes cursor {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+</style>
+<script>
+  const textElement = document.getElementById("text");
+  const text = ["Temukan Buku Impianmu", "Tambahkan ke Wishlist", "Beri Dukungan Penulis dengan Upvote!"];
+  let textIndex = 0;
+  let charIndex = 0;
+
+  function type() {
+      if (charIndex < text[textIndex].length) {
+          textElement.innerHTML += text[textIndex].charAt(charIndex);
+          charIndex++;
+          setTimeout(type, 100); // Kecepatan ketik, sesuaikan sesuai kebutuhan
+      } else {
+          setTimeout(erase, 1000); // Waktu tampilan teks sebelum dihapus
+      }
+  }
+
+  function erase() {
+      if (charIndex > 0) {
+          textElement.innerHTML = text[textIndex].substring(0, charIndex - 1);
+          charIndex--;
+          setTimeout(erase, 50); // Kecepatan menghapus, sesuaikan sesuai kebutuhan
+      } else {
+          textIndex = (textIndex + 1) % text.length;
+          setTimeout(type, 500); // Waktu tampilan sebelum mengetik ulang
+      }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(type, 1000); // Waktu tampilan awal
+  });
+
+  function truncateText() {
+  const element = document.getElementById("truncatedText");
+  const originalText = element.innerHTML;
+  const maxLength = 16; // Set the maximum length for the text
+  if (originalText.length > maxLength) {
+    element.innerHTML = originalText.substring(0, maxLength) + "...";
+    }
+  }
+
+  truncateText(); // Call the function to truncate the text
+</script>
 {% endblock %}
