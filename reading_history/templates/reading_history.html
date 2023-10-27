@@ -1,30 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Reading History</title>
-</head>
-<body>
-    <h1>Reading History</h1>
+{% extends "base.html" %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Date Finished</th>
-                <th>Progress</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in reading_history %}
-            <tr>
-                <td>{{ entry.book_title }}</td>
-                <td>{{ entry.book_author }}</td>
-                <td>{{ entry.date_finished }}</td>
-                <td>{{ entry.progress }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% block content %}
+    <div class="container">
+        <h1>Reading History</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Date Finished</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in reading_history %}
+                    <tr>
+                        <td>{{ reading_history.book_title }}</td>
+                        <td>{{ reading_history.book_author }}</td>
+                        <td>{{ reading_history.date_finished }}</td>
+                        <td>{{ reading_history.progress }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

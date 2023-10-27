@@ -7,7 +7,6 @@ from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-
 # Create your views here.
 @login_required
 def show_history(request, id):
@@ -20,8 +19,7 @@ def show_history(request, id):
 @login_required
 def save_reading_history(request, book_id):
     if request.method == 'POST':
-        # Di sini, Anda perlu mengidentifikasi buku yang akan disimpan, misalnya, dengan ID buku
-        book = Book.objects.get(id=book_id)  # Gantilah dengan cara Anda mengidentifikasi buku
+        book = Book.objects.get(id=book_id)  
 
         # Anda kemudian dapat membuat entri baru dalam riwayat bacaan pengguna
         reading_history = ReadingHistory(user=request.user, book_title=book.title, book_author=book.author, date_finished=None, progress=0)

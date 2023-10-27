@@ -22,7 +22,7 @@ urlpatterns = [
     path('authentication/', include('authentication.urls')),
     path('upvote_book/', include('upvote_book.urls')),
     path('review_book/', include('review_book.urls')),
-    # path('reading_history/', include('reading_history.urls')),
+    path('reading_history/', include('reading_history.urls')),
     # path('favorite_book/', include('favorite_book.urls')),
     path('admin/', admin.site.urls),
 ]

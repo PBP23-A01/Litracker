@@ -1,5 +1,5 @@
 from django.urls import path
-from review_book.views import show_history
+from reading_history.views import show_history
 
 app_name = 'reading_history'
 
