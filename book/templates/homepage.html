@@ -120,11 +120,11 @@
                 <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
                     <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
                         <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
-                        1
+                        {{ book.rank }} 
                     </div>
                     <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                         <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;">177 Votes</p>
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
                     </div>
                 </div>
                 <div class="about d-flex flex-column" style="background-color: white;">
@@ -137,8 +137,8 @@
                 </div>
 
                 <div class="action" style="background-color: white;">
-                    <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                        Lihat Detail
+                    <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                      <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">Upvote</a>
                     </button>
                 </div>
                 
@@ -153,8 +153,6 @@
   
   
 </div>
-
-
 
 
 

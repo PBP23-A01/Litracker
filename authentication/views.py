@@ -41,10 +41,19 @@ def index(request):
     if request.user.is_authenticated:
         return redirect('book:show_homepage')  # Redirect to the book:index view
     else:
-        books = Book.objects.all()
+        books = Book.objects.all().order_by('-total_votes')
+
+        rank = 0
+        prev_votes = None
+        
+        for book in books:
+            if book.total_votes != prev_votes:
+                rank += 1
+            book.rank = rank
+            prev_votes = book.total_votes
+        
         context = {'books': books}
         return render(request,'index.html', context)
-        return render(request, 'index.html')
 
 def get_books(request):
     data = Book.objects.all()
