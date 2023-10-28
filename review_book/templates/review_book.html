@@ -1,3 +1,70 @@
+review_book.html:
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Desktop Navbar -->
+<div class="desktop">
+  <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 40px; padding-block: 20px;">
+      <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
+          <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
+              <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <div class="nav-text-primary d-flex">Rekomendasi Buku</div>
+          </div>
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+              <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+          </div>
+
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+            <a href="{% url 'review_book:show_review' %}" style="text-decoration: none;">
+              <div class="nav-text-secondary d-flex" >Ulasan</div>
+            </a>
+          </div>
+             
+      </div>
+      <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
+          <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
+              <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
+              <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
+              <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
+          </div>
+      </div>
+      <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
+          <div class="vertical-line"></div>
+          <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+            <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
+          </div>
+          <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+          </div>
+          <div class="vertical-line"></div>
+
+          <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
+              Halo, {{ user.username }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Acount Info</a></li>
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+          </ul>
+
+
+          <div class="user" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--kashmir-blue-100); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="{% static 'icon/user grey.png' %}" alt="user" style="height: 24px; width: 24px; background-color: var(--kashmir-blue-100);">
+          </div>
+      </div>
+  </nav>
+
+  
+</div>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,25 +73,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://unpkg.com/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <title>Review Book</title>
+  <style>
+    /* CSS untuk memperpanjang kartu */
+    .extended-card {
+        height: 100%; /* Panjang kartu mengikuti kontennya */
+        overflow: auto; /* Munculkan bilah gulir jika kontennya lebih panjang dari kartu */
+    }
+  </style>
 </head>
 <body class="bg-gray-100">
-
 <div class="container mx-auto p-8">
   <h2 class="text-2xl font-bold mb-8">Review Book</h2>
 
   <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
       {% for book in books %}
-      <div class="bg-white p-6 rounded-lg shadow-lg mb-20 relative">
-          <div class="aspect-w-3 aspect-h-2 bg-gray-200">
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-20 relative extended-card">
+          <div class="aspect-w-3 aspect-h-2 bg-white-200">
               <img src={{ book.image_url_s }}
                   alt="Product image" class="object-cover object-center w-full h-1/2">
           </div>
-          <div class="mt-4">
+          <div class="mt-4 bg-white-200">
               <h3 class="text-lg font-semibold text-gray-900">{{ book.title }}</h3>
               <p class="text-sm text-gray-500">Author: {{ book.author }}</p>
               <p class="text-sm text-gray-500">Publisher Year: {{ book.published_year }}</p>
               <p class="text-sm text-gray-500">ISBN: {{ book.isbn }}</p>
               <p class="text-sm text-gray-500">Publisher: {{ book.publisher }}</p>
+          
+              
           </div>
           <div class="absolute bottom-0 left-24 p-10 text-center">
               <a href="{% url 'review_book:add_review' %}" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center">
@@ -41,3 +116,5 @@
 </div>
 </body>
 </html>
+
+{% endblock %}
