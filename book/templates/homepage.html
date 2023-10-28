@@ -18,10 +18,8 @@
           </div>
 
           <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
-            <a href="{% url 'review_book:show_review' %}">
-                <button>
-                  Ulasan
-                </button>
+            <a href="{% url 'review_book:show_review' %}" style="text-decoration: none;">
+              <div class="nav-text-secondary d-flex" >Ulasan</div>
             </a>
           </div>
              
@@ -36,7 +34,7 @@
       <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
           <div class="vertical-line"></div>
           <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-              <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);">
+            <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
           </div>
           <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
               <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
