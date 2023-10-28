@@ -50,13 +50,13 @@ def upvote_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     user_profile = UserProfile.objects.get(user=request.user)
 
-    if book in user_profile.books.all():
+    if book in user_profile.upvoted_books.all():
         # User has already upvoted the book, so remove the upvote
-        user_profile.books.remove(book)
+        user_profile.upvoted_books.remove(book)
         book.total_votes -= 1
     else:
         # User has not upvoted the book, so add the upvote
-        user_profile.books.add(book)
+        user_profile.upvoted_books.add(book)
         book.total_votes += 1
 
     # Save the changes to both the book and user profile within a transaction

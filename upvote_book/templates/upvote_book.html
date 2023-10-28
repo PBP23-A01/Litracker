@@ -100,16 +100,13 @@
         <div class="text-2xl-black">List Upvote Kamu</div>
 
         <div class="allcards row" style="background-color: white;">
-            {% for book in books %}
+            {% for book in upvoted_books %}
                 <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
                     <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
                         <img src="{{ book.image_url_l }}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
                         <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
                             <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
-                                <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
-                                    <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
-                                    {{ book.rank }}
-                                </div>
+                                
                                 <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                                     <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
                                     <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_votes }}</p>

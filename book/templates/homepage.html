@@ -139,7 +139,7 @@
                 <div class="action" style="background-color: white;">
                     <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                       <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.books.all %}
+                        {% if book in request.user.userprofile.upvoted_books.all %}
                             Remove Upvote
                         {% else %}
                             Upvote
