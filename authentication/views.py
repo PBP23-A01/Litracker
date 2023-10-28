@@ -38,9 +38,13 @@ def logout_user(request):
     return redirect('authentication:index')  # Redirect to the login page after logout
 
 def index(request):
-    books = Book.objects.all()
-    context = {'books': books}
-    return render(request,'index.html', context) # Mampir ke landing sebelum login
+    if request.user.is_authenticated:
+        return redirect('book:show_homepage')  # Redirect to the book:index view
+    else:
+        books = Book.objects.all()
+        context = {'books': books}
+        return render(request,'index.html', context)
+        return render(request, 'index.html')
 
 def get_books(request):
     data = Book.objects.all()
