@@ -16,8 +16,14 @@
             </div>
             <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
                 <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                <div class="nav-text-secondary">Ulasan</div>
             </div>
+  
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+              <a href="{% url 'review_book:show_review' %}" style="text-decoration: none;">
+                <div class="nav-text-secondary d-flex" >Ulasan</div>
+              </a>
+            </div>
+               
         </div>
         <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
             <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
@@ -29,33 +35,33 @@
         <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
             <div class="vertical-line"></div>
             <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-                <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);">
+              <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
             </div>
             <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
                 <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
             </div>
             <div class="vertical-line"></div>
-
+  
             <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
-                Halo, Mumu
+                Halo, {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
                 <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Acount Info</a></li>
-                <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+                <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
             </ul>
-
-
+  
+  
             <div class="user" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--kashmir-blue-100); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
                 <img src="{% static 'icon/user grey.png' %}" alt="user" style="height: 24px; width: 24px; background-color: var(--kashmir-blue-100);">
             </div>
         </div>
     </nav>
-
+  
     
-</div>
-
-<!-- Mobile Navbar -->
-<div class="mobile">
+  </div>
+  
+  <!-- Mobile Navbar -->
+  <div class="mobile">
     <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 28px; padding-block: 20px;">
         <div class="container-fluid col-2 d-flex justify-content-start align-items-center h-100 g-0" style="background-color: white;" >
             <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; width: 40px; height: 40px;">
@@ -72,14 +78,14 @@
             <img src="{% static 'icon/menu.png' %}" alt="menu" style="height: 24px; width: 24px; background-color: white;">
         </div>
     </nav>
-</div>
+  </div>
 
 <div class="container-fluid d-flex flex-row  p-5 " style="margin-top: 80px; min-height: 900px;">
     <div class="col-2 d-flex">
     </div>
     <div class="col-2 d-flex flex-column p-5 align-items-start position-fixed" style="background-color: white;  border-radius: 32px; margin-right: 20px; ">
         <img src="{% static 'icon/user grey.png' %}" alt="user" style="padding: 16px; height: 80px; width: 80px; background-color: var(--kashmir-blue-100); border-radius: 20px;">
-        <div class="text-xl-black py-3">Halo, Mumu</div>
+        <div class="text-xl-black py-3">Halo, {{ user.username }}</div>
         <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
             <img src="{% static 'icon/upvote blue.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: var(--jaguar-100); border-radius: 12px; margin-right: 8px;">
             <div class="text-lg-black">Upvoting</div>
@@ -94,39 +100,37 @@
         <div class="text-2xl-black">List Upvote Kamu</div>
 
         <div class="allcards row" style="background-color: white;">
-
-            <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
-                <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
-                    <img src="{% static 'icon/book dummy.png' %}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
-                    <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
-                        <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
-                            <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
-                                <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
-                                9
+            {% for book in books %}
+                <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
+                    <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
+                        <img src="{{ book.image_url_l }}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
+                        <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
+                            <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                                <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                                    <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                                    {{ book.rank }}
+                                </div>
+                                <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                                    <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                                    <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_votes }}</p>
+                                </div>
                             </div>
-                            <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
-                                <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                                <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">177 Votes</p>
+                            <div class="about d-flex flex-column" style="background-color: white;">
+                                <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">{{ book.title }}</p>
+                                <p style="margin-bottom: 0px; background-color: white;">{{ book.author }}</p>
+                            </div>
+                            <div class="action" style="background-color: white;">
+                                <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                                    Batalkan Vote
+                                </button>
                             </div>
                         </div>
-                        <div class="about d-flex flex-column" style="background-color: white;">
-                            <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">The Last Four Things</p>
-                            <p style="margin-bottom: 0px; background-color: white;">Paul Hoffman</p>
-                        </div>
-
-                        <div class="action" style="background-color: white;">
-                            <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
-                                Batalkan Vote
-                            </button>
-                        </div>
-                        
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
-
 
 
 {% endblock content %}
