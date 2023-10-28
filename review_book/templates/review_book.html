@@ -82,38 +82,40 @@ review_book.html:
   </style>
 </head>
 <body class="bg-gray-100">
-<div class="container mx-auto p-8">
-  <h2 class="text-2xl font-bold mb-8">Review Book</h2>
 
-  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-      {% for book in books %}
-      <div class="bg-white p-6 rounded-lg shadow-lg mb-20 relative extended-card">
-          <div class="aspect-w-3 aspect-h-2 bg-white-200">
-              <img src={{ book.image_url_s }}
-                  alt="Product image" class="object-cover object-center w-full h-1/2">
-          </div>
-          <div class="mt-4 bg-white-200">
-              <h3 class="text-lg font-semibold text-gray-900">{{ book.title }}</h3>
-              <p class="text-sm text-gray-500">Author: {{ book.author }}</p>
-              <p class="text-sm text-gray-500">Publisher Year: {{ book.published_year }}</p>
-              <p class="text-sm text-gray-500">ISBN: {{ book.isbn }}</p>
-              <p class="text-sm text-gray-500">Publisher: {{ book.publisher }}</p>
-          
-              
-          </div>
-          <div class="absolute bottom-0 left-24 p-10 text-center">
-              <a href="{% url 'review_book:add_review' %}" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                  </svg>
-                  <span class="ml-2">Review</span>
-              </a>
-          </div>
-      </div>
-      {% endfor %}
-  </div>
-</div>
+    <div class="col-10 d-flex p-5 flex-column" style="background-color: white;  border-radius: 40px; margin-left: 40px;">
+        <div class="text-2xl-black">List Upvote Kamu</div>
+
+        <div class="allcards row" style="background-color: white;">
+            {% for book in books %}
+                <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
+                    <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
+                        <img src="{{ book.image_url_l }}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
+                        <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
+                            <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                                <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                                    <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                                    {{ book.rank }}
+                                </div>
+                                <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                                    <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                                    <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_votes }}</p>
+                                </div>
+                            </div>
+                            <div class="about d-flex flex-column" style="background-color: white;">
+                                <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">{{ book.title }}</p>
+                                <p style="margin-bottom: 0px; background-color: white;">{{ book.author }}</p>
+                            </div>
+                            <div class="action" style="background-color: white;">
+                                <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                                    Batalkan Vote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 </body>
 </html>
 

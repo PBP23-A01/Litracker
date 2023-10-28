@@ -23,10 +23,15 @@ def readBook_ajax(request, book_id):
     if request.method == 'POST':
         book = Book.objects.get(id=book_id)  
         last_page = request.POST.get("last_page")
-        
 
         reading_history = ReadingHistory(user=request.user, book_title=book.title, book_author=book.author, date_finished=None, last_page=0)
         reading_history.save()
 
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
+
+def add_upvote(request, book_id):
+    book = Book.objects.get(pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    user_profile.upvoted_books.add(book)
+    return redirect('book_detail', book_id=book_id)
