@@ -1,27 +1,32 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Reading History</title>
+</head>
+<body class="bg-gray-100">
+<div class="container mx-auto p-8">
+  <h2 class="text-2xl font-bold mb-8">Reading History</h2>
 
-{% block content %}
-    <div class="container">
-        <h1>Reading History</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Date Finished</th>
-                    <th>Progress</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for entry in reading_history %}
-                    <tr>
-                        <td>{{ reading_history.book_title }}</td>
-                        <td>{{ reading_history.book_author }}</td>
-                        <td>{{ reading_history.date_finished }}</td>
-                        <td>{{ reading_history.progress }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% endblock content %}
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+      {% for history in reading_history %}
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-20 relative">
+          <div class="aspect-w-3 aspect-h-2 bg-gray-200">
+              <img src="{{ history.book.image_url_s }}"
+                  alt="Book cover" class="object-cover object-center w-full h-1/2">
+          </div>
+          <div class="mt-4">
+              <h3 class="text-lg font-semibold text-gray-900">{{ history.book.title }}</h3>
+              <p class="text-sm text-gray-500">Author: {{ history.book.author }}</p>
+              <p class="text-sm text-gray-500">Last Page: {{ history.last_page }}</p>
+              <p class="text-sm text-gray-500">Date Opened: {{ history.date_opened }}</p>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+</body>
+</html>
