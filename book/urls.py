@@ -5,5 +5,5 @@ app_name = 'book'
 
 urlpatterns = [
     path('api/book/', get_books, name='get_books'),
-    path('', show_homepage, name='homepage')
+    path('', show_homepage, name='show_homepage')
 ]
