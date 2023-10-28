@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+
+    <title>Review Book</title>
+    <style>
+        /* CSS tambahan untuk mengatur kartu di tengah */
+        .centered-card {
+            display: flex;
+            flex-direction: column; /* Ubah arah tata letak ke kolom */
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Set tinggi sesuai kebutuhan */
+        }
+        /* Tambahkan margin antara dua kartu */
+        .card-container {
+            margin-top: 32px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <h2 class="text-3xl font-bold mb-8">Review Book</h2>
+
+     
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-1/2 ">
+                    <!-- Konten kartu pertama -->
+                    <div class="aspect-w-3 aspect-h-2 bg-gray-200">
+                        <img src={{ book.image_url_s }}
+                            alt="Product image" class="object-cover object-center w-full h-full">
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold">{{ book.title }}</h3>
+                        <p class="text-sm text-gray-500">Author: {{ book.author }}</p>
+                        <p class="text-sm text-gray-500">Publisher Year: {{ book.published_year }}</p>
+                        <p class="text-sm text-gray-500">ISBN: {{ book.isbn }}</p>
+                        <p class="text-sm text-gray-500">Publisher: {{ book.publisher }}</p>
+                    </div>
+                </div>
+        
+    <div class="bg-white p-10 rounded-lg shadow-lg">
+        
+        <!-- Konten kartu kedua -->
+        <p class="text-lg font-semibold">Ulasan Pengguna</p>
+        <p class="text-sm text-gray-500">@mumu : "buku ini sangat rekomen karena cerita yang menyenangkan dan tidak membuat bosan para pembaca"</p>
+        <p class="text-sm text-gray-500">@mumu : "buku ini sangat rekomen karena cerita yang menyenangkan dan tidak membuat bosan para pembaca"</p>
+        <p class="text-sm text-gray-500">@mumu : "buku ini sangat rekomen karena cerita yang menyenangkan dan tidak membuat bosan para pembaca"</p>
+        <p class="text-sm text-gray-500">@mumu : "buku ini sangat rekomen karena cerita yang menyenangkan dan tidak membuat bosan para pembaca"</p>
+        
+        <!-- Pindahkan tombol "Add Review" ke dalam kartu kedua -->
+        
+        <button class="bg-purple-500 hover:bg-purple-600 absolute top-200 right-32 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+            </svg>
+            <span class="ml-2" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add Review</span>
+            
+        </button>
+       
+
+        <div class="ml-auto bg-purple-500 hover:bg-purple-600 absolute top-250 left-25 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;"> </div>
+            <a href="{% url 'review_book:show_review' %}">
+                <button class="bg-purple-500 hover:bg-purple-600 absolute top-250 left-25 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;">
+                    Back
+                </button>
+            </a>
+        </div>
+
+       
+            </div>
+        </div>
+        
+
+</body>
+</html>
