@@ -41,9 +41,10 @@ def index(request):
     if request.user.is_authenticated:
         return redirect('book:show_homepage')  # Redirect to the book:index view
     else:
-        # Render the landing page before login
-        # You can include your landing page logic here
-        return render(request, 'landing.html')
+        books = Book.objects.all()
+        context = {'books': books}
+        return render(request,'index.html', context)
+        return render(request, 'index.html')
 
 def get_books(request):
     data = Book.objects.all()
