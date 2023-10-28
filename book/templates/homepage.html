@@ -15,8 +15,16 @@
           </div>
           <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
               <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-              <div class="nav-text-secondary">Ulasan</div>
           </div>
+
+          <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+            <a href="{% url 'review_book:show_review' %}">
+                <button>
+                  Ulasan
+                </button>
+            </a>
+          </div>
+             
       </div>
       <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
           <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
