@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login, logout
+from book.models import Book
 
 # Create your views here.
 
@@ -34,4 +35,14 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('authentication:login_user')  # Redirect to the login page after logout
+    return redirect('authentication:index')  # Redirect to the login page after logout
+
+def index(request):
+    books = Book.objects.all()
+    context = {'books': books}
+    return render(request,'index.html', context) # Mampir ke landing sebelum login
+
+def get_books(request):
+    data = Book.objects.all()
+    return HttpResponse(serializers.serialize("json", data), 
+                        content_type="application/json")
