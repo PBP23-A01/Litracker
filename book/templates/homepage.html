@@ -143,25 +143,24 @@
                     <button class="readBook_ajax-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">Read Book</button>
                 </div>
 
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Reading History</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                              <form id="form" onsubmit="return false;">
-                                  {% csrf_token %}
-                                  <div class="mb-3">
-                                      <label for="last_page" class="col-form-label">Last Page:</label>
-                                      <input type="number" class="form-control" id="last_page" name="last_page"></input>
-                                  </div>
-                              </form>
-                          </div>
+                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba(87, 87, 87, 0.034);">
+                            <div class="modal-dialog" style="border-radius: 20px; border-style: none; background-color: white;">
+                                <div class="modal-content" style="border-radius: 20px; border-style: none; background-color: white;">
+                                    <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
+                                      <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
+                                    </div>
+                                    <div class="modal-body" style="background-color: white;">
+                                        <form id="form" style="background-color: white;" onsubmit="return false;">
+                                            {% csrf_token %}
+                                            <div class="mb-3" style="background-color: white;">
+                                                <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
+                                                <input type="number" class="form-control " id="last_page" name="last_page"></input>
+                                            </div>
+                                        </form>
+                                    </div>
                           <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Reading History</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
+                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">Add Reading History</button>
                           </div>
                       </div>
                   </div>
