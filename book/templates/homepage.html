@@ -160,12 +160,12 @@
                           </div>
                           <div class="modal-body" style="background-color: white;">
                             <form id="form" style="background-color: white;" onsubmit="return false;">
-                                {% csrf_token %}
-                                <div class="mb-3" style="background-color: white;">
-                                    <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
-                                    <input type="number" class="form-control" id="last_page" name="last_page"></input>
-                                </div>
-                            </form>
+                              {% csrf_token %}
+                              <div class="mb-3" style="background-color: white;">
+                                  <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
+                                  <input type="number" class="form-control" id="last_page" name="last_page"></input>
+                              </div>
+                          </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
@@ -277,25 +277,17 @@
                             <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
                           </div>
                           <div class="modal-body" style="background-color: white;">
-                            <form id="form" style="background-color: white;" onsubmit="return false;">
+                            <form id="form" style="background-color: white;">
                                 {% csrf_token %}
                                 <div class="mb-3" style="background-color: white;">
-                                    <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
-                                    <input type="number" class="form-control" id="last_page" name="last_page"></input>
+                                    <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px;">Last Page:</label>
+                                    <input type="number" class="form-control" id="last_page" name="last_page">
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
-                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
-                                <a href="{% url 'book:simpan_last_page' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                                    {% if book in request.user.userprofile.history_books.all %}
-                                        Remove Reading History
-                                    {% else %}
-                                        Add Reading History
-                                    {% endif %}
-                                </a>
-                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="button_add" data-book-id="{{ book.pk }}" data-bs-dismiss="modal">Save Last Page</button>
                         </div>                        
                         </div>
                     </div>
@@ -342,13 +334,7 @@
                     </a>
                   </button>
                   <button class="modal-fade" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <a href="{% url 'book:simpan_last_page' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                      {% if book in request.user.userprofile.simpan_last_page_books.all %}
-                          Remove Read Book
-                      {% else %}
-                          Read Book 
-                      {% endif %}
-                    </a>
+                    Riwayat Bacaan
                   </button>
                 </div>
               </div>
@@ -476,60 +462,48 @@
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Ambil elemen formulir dan tombol
-    const form = document.getElementById("form");
-    const lastPageInput = document.getElementById("last_page");
-    const addButton = document.getElementById("button_add");
+  document.getElementById('button_add').addEventListener('click', function () {
+      var bookId = this.getAttribute('data-book-id');
+      var lastPage = document.getElementById('last_page').value;
 
-    addButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        const bookId = this.getAttribute("data-book-id");
-        const lastPageValue = lastPageInput.value;
-        readingHistory(bookId, lastPageValue);
-    });
-
-
-    function readingHistory(bookId, lastPageValue) {
-      // Kirim data ke server menggunakan fetch
-      fetch(`/home/simpan_last_page/${bookId}/`, { // Menggunakan tanda kutip belakang untuk URL
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify({ last_page: lastPageValue }),
+      // Send an AJAX request to the view to save the last page
+      fetch(`/book/save_last_page/${bookId}/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'), // Get the CSRF token
+          },
+          body: JSON.stringify({ 'last_page': lastPage }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          // Di sini Anda dapat menangani respons dari server
-          // Contoh: jika server mengembalikan pesan sukses, Anda dapat menampilkan pesan sukses kepada pengguna
-          alert(data.message);
-        })
-        .catch((error) => {
-          // Tangani kesalahan jika terjadi
-          console.error("Error:", error);
-        });
-    }
-
-    // Fungsi untuk mendapatkan CSRF token
-    function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === name + "=") {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              // Success message
+              alert(data.message);
+          } else {
+              // Handle errors here
+              alert('Error: ' + data.error);
           }
-        }
+      });
+  });
+
+  // Function to get the CSRF token from cookies
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              // Search for a cookie with the given name
+              if (cookie.substring(0, name.length + 1) === name + '=') {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
       }
       return cookieValue;
-    }
-  });
+  }
 </script>
-
 
 <style>
   body {

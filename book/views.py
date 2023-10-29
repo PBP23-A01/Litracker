@@ -145,40 +145,28 @@ def last_page(request, book_id):
     # Return a JSON response indicating success or failure
     return redirect('authentication:index')
 
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from reading_history.models import ReadingHistory
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
+@login_required
 def simpan_last_page(request, book_id):
-    # Ambil objek ReadingHistory yang sesuai dengan user dan buku
-    user = request.user
-    book = Book.objects.get(id=book_id)
-    try:
-        reading_history = ReadingHistory.objects.get(user=user, book=book)
-    except ReadingHistory.DoesNotExist:
-        # Jika objek tidak ada, Anda mungkin ingin membuatnya
-        reading_history = ReadingHistory(user=user, book=book)
+    if request.method == 'POST':
+        user = request.user
+        last_page = request.POST.get('last_page')
 
-    # Ambil nilai last_page dari permintaan POST
-    last_page = request.POST.get('last_page')
+        try:
+            reading_history = ReadingHistory.objects.get(user=user, book_id=book_id)
+            reading_history.last_page = last_page
+            reading_history.save()
+        except ReadingHistory.DoesNotExist:
+            # If no record exists, create a new one
+            ReadingHistory.objects.create(user=user, book_id=book_id, last_page=last_page)
 
-    if last_page is not None:
-        # Simpan nilai last_page ke dalam objek ReadingHistory
-        reading_history.last_page = int(last_page)
-        reading_history.save()
-
-        # Berikan respons JSON yang sesuai
-        response_data = {
-            'message': 'Last page saved successfully.'
-        }
-
-        return JsonResponse(response_data)
+        return JsonResponse({'message': 'Last page saved successfully'})
     else:
-        # Jika tidak ada nilai last_page yang diberikan, berikan respons JSON dengan pesan kesalahan
-        response_data = {
-            'error': 'Last page is required.'
-        }
-
-        return JsonResponse(response_data, status=400)
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 

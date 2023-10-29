@@ -55,3 +55,21 @@ def history_book(request):
     }
 
     return render(request, 'reading_history.html', context)
+
+
+
+from django.shortcuts import render
+from review_book.models import ReviewBook
+from book.models import Book  # Import model Book
+
+def get_last_page(request, book_id):
+    # Dapatkan objek buku berdasarkan ID
+    book = Book.objects.get(id=book_id)
+    
+    # Dapatkan objek ReviewBook yang sesuai untuk buku dan pengguna yang sudah login
+    review = ReviewBook.objects.filter(book=book, user=request.user).last()
+    
+    # Ambil nilai last_page dari objek review (atau sesuaikan dengan nama kolom yang sesuai)
+    last_page = review.last_page if review else None
+    
+    return render(request, 'get_last_page.html', {'last_page': last_page})

@@ -9,3 +9,4 @@ class ReadingHistory(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     last_page = models.PositiveIntegerField(default=0)
     date_opened = models.DateField(auto_now_add=True)
+    
