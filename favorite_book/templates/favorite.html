@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load static %}
+
+<!-- Desktop Navbar -->
+<div class="desktop">
+    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 40px; padding-block: 20px;">
+        <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
+            <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
+                <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                <div class="nav-text-primary d-flex">Rekomendasi Buku</div>
+            </div>
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+                <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+            </div>
+  
+            <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
+              <a href="{% url 'review_book:show_review' %}" style="text-decoration: none;">
+                <div class="nav-text-secondary d-flex" >Ulasan</div>
+              </a>
+            </div>
+               
+        </div>
+        <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
+            <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
+                <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
+                <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
+                <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
+            </div>
+        </div>
+        <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
+            <div class="vertical-line"></div>
+            <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+              <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
+            </div>
+            <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+            </div>
+            <div class="vertical-line"></div>
+  
+            <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
+                Halo, {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
+                <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Account Info</a></li>
+                <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+            </ul>
+  
+  
+            <div class="user" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--kashmir-blue-100); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/user grey.png' %}" alt="user" style="height: 24px; width: 24px; background-color: var(--kashmir-blue-100);">
+            </div>
+        </div>
+    </nav>
+  
+    
+  </div>
+  
+  <!-- Mobile Navbar -->
+  <div class="mobile">
+    <nav class="container-fluid d-flex flex-row justify-content-between g-0 fixed-top align-items-center" style="background-color: white; height: 100px; padding-inline: 28px; padding-block: 20px;">
+        <div class="container-fluid col-2 d-flex justify-content-start align-items-center h-100 g-0" style="background-color: white;" >
+            <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; width: 40px; height: 40px;">
+        </div>
+        <div class="container-fluid col-8 d-flex justify-content-center align-items-center h-100 g-0" style="background-color: white;">
+            <div class="upvote" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 20px; width: 20px; background-color: var(--jaguar-600);">
+            </div>
+            <div class="wishlist" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 20px; width: 20px; background-color: var(--coral-red-400);">
+            </div>
+        </div>
+        <div class="container-fluid col-2 d-flex justify-content-end align-items-center h-100 g-0" style="background-color: white;">
+            <img src="{% static 'icon/menu.png' %}" alt="menu" style="height: 24px; width: 24px; background-color: white;">
+        </div>
+    </nav>
+  </div>
+
+<div class="container-fluid d-flex flex-row  p-5 " style="margin-top: 80px; min-height: 900px;">
+    <div class="col-2 d-flex">
+    </div>
+    <div class="col-2 d-flex flex-column p-5 align-items-start position-fixed" style="background-color: white;  border-radius: 32px; margin-right: 20px; ">
+        <img src="{% static 'icon/user grey.png' %}" alt="user" style="padding: 16px; height: 80px; width: 80px; background-color: var(--kashmir-blue-100); border-radius: 20px;">
+        <div class="text-xl-black py-3">Halo, {{ user.username }}</div>
+        <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
+            <img src="{% static 'icon/upvote blue.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: var(--jaguar-100); border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-black">Upvoting</div>
+        </div>
+        <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
+            <img src="{% static 'icon/love grey.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: white; border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-grey">Wishlist</div>
+        </div>
+    </div>
+    
+    <div class="col-10 d-flex p-5 flex-column" style="background-color: white;  border-radius: 40px; margin-left: 40px;">
+        <div class="text-2xl-black">Wishlist Kamu</div>
+
+        <div class="allcards row" style="background-color: white;">
+            {% for book in wishlist_books %}
+                <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
+                    <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
+                        <img src="{{ book.image_url_l }}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
+                        <div class="content-card d-flex flex-column justify-content-between w-100" style="background-color: white;">
+                            <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                                
+                                <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                                    <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                                    <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_votes }}</p>
+                                </div>
+                            </div>
+                            <div class="about d-flex flex-column" style="background-color: white;">
+                                <p style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700;">{{ book.title }}</p>
+                                <p style="margin-bottom: 0px; background-color: white;">{{ book.author }}</p>
+                            </div>
+                            <div class="action" style="background-color: white;">
+                                <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                                        {% if book in request.user.userprofile.wishlist_books.all %}
+                                            Batalkan Vote
+                                        {% endif %}
+                                      </a>
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to handle upvoting
+    document.addEventListener("DOMContentLoaded", function () {
+        const upvoteButtons = document.querySelectorAll(".upvote-link");
+        upvoteButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                const bookId = this.getAttribute("data-book-id");
+                upvoteBook(bookId);
+            });
+        });
+  
+        function upvoteBook(bookId) {
+            fetch("{% url 'book:upvote_book' 0 %}".replace("0", bookId), {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"), // Make sure you have a function to get the CSRF token
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const button = document.getElementById(`upvote-button-${bookId}`);
+                        const upvoteText = button.querySelector(".upvote-link");
+                        if (upvoteText.textContent.trim() === "Upvote") {
+                            upvoteText.textContent = "Remove Upvote";
+                        } else {
+                            upvoteText.textContent = "Upvote";
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error upvoting book:", error);
+                });
+        }
+  
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+  </script>
+  
+{% endblock content %}

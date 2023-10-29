@@ -38,8 +38,10 @@
           <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
             <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
           </div>
-          <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+          <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <a href="add_favorite/">
+            <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+          </a>
           </div>
           <div class="vertical-line"></div>
 
@@ -75,8 +77,8 @@
           <div class="upvote" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
               <img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 20px; width: 20px; background-color: var(--jaguar-600);">
           </div>
-          <div class="wishlist" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 20px; width: 20px; background-color: var(--coral-red-400);">
+          <div class="wishlist" style="height: 40px; width: 40px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 20px; width: 20px; background-color: var(--coral-red-400);">
           </div>
       </div>
       <div class="container-fluid col-2 d-flex justify-content-end align-items-center h-100 g-0" style="background-color: white;">
@@ -186,7 +188,7 @@
                   </button>
                   <button class="favorite-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                     <!-- Ganti ke favorite book nanti -->
-                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                    <a href="{% url 'book:add_favorite' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
                       {% if book in request.user.userprofile.upvoted_books.all %}
                           Remove Favorite
                       {% else %}
