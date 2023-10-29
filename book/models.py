@@ -12,3 +12,5 @@ class Book(models.Model):
     image_url_m = models.TextField(null=True, blank=True)
     image_url_l = models.TextField(null=True, blank=True)
     total_votes = models.IntegerField(default=0)
+    total_wishlist = models.IntegerField(default=0)
+    progress = models.PositiveIntegerField(default=0)

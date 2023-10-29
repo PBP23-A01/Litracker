@@ -9,3 +9,6 @@ class UserProfile(models.Model):
     is_admin = models.BooleanField(default=False)
     is_user = models.BooleanField(default=False)
     books = models.ManyToManyField(Book)
+    upvoted_books = models.ManyToManyField(Book, related_name="upvoters", blank=True)
+    wishlist_books = models.ManyToManyField(Book, related_name="wishlists", blank=True)
+    history_books = models.ManyToManyField(Book, related_name="histories", blank=True)

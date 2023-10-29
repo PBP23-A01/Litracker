@@ -18,20 +18,40 @@ def reading_history(request, pk):
     }
     return render(request, "reading_history.html", context)
 
+# @login_required
+# def readBook_ajax(request, book_id):
+#     if request.method == 'POST':
+#         book = Book.objects.get(id=book_id)  
+#         last_page = request.POST.get("last_page")
+
+#         reading_history = ReadingHistory(user=request.user, book_title=book.title, book_author=book.author, last_page=last_page)
+#         reading_history.save()
+
+#         return HttpResponse(b"CREATED", status=201)
+#     return HttpResponseNotFound()
+
 @login_required
-def readBook_ajax(request, book_id):
-    if request.method == 'POST':
-        book = Book.objects.get(id=book_id)  
-        last_page = request.POST.get("last_page")
+def get_read_books(request):
+    read_books = ReadingHistory.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", read_books), 
+                        content_type="application/json")
 
-        reading_history = ReadingHistory(user=request.user, book_title=book.title, book_author=book.author, date_finished=None, last_page=0)
-        reading_history.save()
-
-        return HttpResponse(b"CREATED", status=201)
-    return HttpResponseNotFound()
-
-def add_upvote(request, book_id):
-    book = Book.objects.get(pk=book_id)
+@login_required
+def history_book(request):
+    # Get the user's profile
     user_profile = UserProfile.objects.get(user=request.user)
-    user_profile.upvoted_books.add(book)
-    return redirect('book_detail', book_id=book_id)
+
+    # Get the user's reading history
+    reading_history = ReadingHistory.objects.filter(user=user_profile.user)
+
+    # Check if there is any reading history for the user
+    last_page = 0  # Default value if no reading history is found
+    if reading_history.exists():
+        last_page = reading_history.latest('date_opened').last_page
+
+    context = {
+        'reading_history': reading_history,
+        'last_page': last_page,
+    }
+
+    return render(request, 'reading_history.html', context)

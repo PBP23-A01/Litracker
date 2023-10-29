@@ -27,8 +27,10 @@
       <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
           <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
               <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
-              <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
-              <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
+              <form method="post" id="search-form">
+                {% csrf_token %}
+                <input type="text" id="search-input" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Cari Judul Buku...">
+              </form>
           </div>
       </div>
       <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
@@ -42,11 +44,15 @@
           <div class="vertical-line"></div>
 
           <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
-              Halo, {{ user.username }}
+            {% if user.is_authenticated %}
+              Halo, {{ user.username }}!
+            {% endif %}
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
-              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Acount Info</a></li>
+            {% if user.is_authenticated %}
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Account Info</a></li>
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+            {% endif %}
           </ul>
 
 
@@ -109,22 +115,28 @@
   <div class="h-100 container-fluid w-100" style="height: 100px; background-color: white; margin-top: 80px; border-radius: 60px 60px 0px 0px; padding: 60px;">
     <p style="font-size: 20px; background-color: white;">Buku Paling Populer</p>
 
-    <div class="container-fluid row h-100 g-0 w-100 justify-content-between" style="background-color: white;">
+    <div id="book-container" class="container-fluid row h-100 g-0 w-100 justify-content-between" style="background-color: white;">
 
       {% for book in books %}
       <div class="py-4 col-xl-3 col-lg-12 align-items-center justify-content-between" style="background-color: white; margin-right: 4px; width: 380px;">
         <div class="card mb-4 p-4 d-flex flex-row row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
           
-            <img class="col-sm-1" src="{{ book.image_url_l }}" alt="user" style="width: 100px; height: 100%; margin-right: 40px; background-color: white; margin-bottom: 16px;">
+            <img class="col-sm-1" src="{{ book.image_url_l }}" alt="user" style="width: 130px; height: 100%; margin-right: 4px; background-color: white; margin-bottom: 16px;">
             <div class="col-sm-1 content-card d-flex flex-column justify-content-between" style="background-color: white;">
                 <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
                     <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
                         <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
                         {{ book.rank }} 
                     </div>
-                    <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                    <div class="d-flex flex-row">
+                      <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                         <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px; margin-right: 10px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
+                      </div>
+                      <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                        <img src="{% static 'icon/love grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_wishlist }}</span></p>
+                      </div>
                     </div>
                 </div>
                 <div class="about d-flex flex-column" style="background-color: white;">
@@ -137,45 +149,90 @@
                 </div>
 
                 <div class="action" style="background-color: white;">
-                    <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                      <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.books.all %}
-                            Remove Upvote
-                        {% else %}
-                            Upvote
-                        {% endif %}
-                      </a>
+                    <button data-bs-toggle="modal" data-bs-target="#detailBukuModal{{ book.pk }}" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                        Lihat Detail
                     </button>
-                    <button class="readBook_ajax-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">Read Book</button>
                 </div>
-
-                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba(87, 87, 87, 0.034);">
-                            <div class="modal-dialog" style="border-radius: 20px; border-style: none; background-color: white;">
-                                <div class="modal-content" style="border-radius: 20px; border-style: none; background-color: white;">
-                                    <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
-                                      <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
-                                    </div>
-                                    <div class="modal-body" style="background-color: white;">
-                                        <form id="form" style="background-color: white;" onsubmit="return false;">
-                                            {% csrf_token %}
-                                            <div class="mb-3" style="background-color: white;">
-                                                <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
-                                                <input type="number" class="form-control " id="last_page" name="last_page"></input>
-                                            </div>
-                                        </form>
-                                    </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
-                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">Add Reading History</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba(87, 87, 87, 0.034);">
+                  <div class="modal-dialog" style="border-radius: 20px; border-style: none; background-color: white;">
+                      <div class="modal-content" style="border-radius: 20px; border-style: none; background-color: white;">
+                          <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
+                            <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
                           </div>
-                      </div>
-                  </div>
-              </div>
-                
+                          <div class="modal-body" style="background-color: white;">
+                            <form id="form" style="background-color: white;" onsubmit="return false;">
+                                {% csrf_token %}
+                                <div class="mb-3" style="background-color: white;">
+                                    <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
+                                    <input type="number" class="form-control" id="last_page" name="last_page"></input>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
+                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
+                                <a href="{% url 'book:simpan_last_page' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                                    {% if book in request.user.userprofile.history_books.all %}
+                                        Remove Reading History
+                                    {% else %}
+                                        Add Reading History
+                                    {% endif %}
+                                </a>
+                            </button>
+                        </div>                        
+                        </div>
+                    </div>
+                </div>
             </div>
-          
         </div>
-        
+      </div>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="detailBukuModal{{ book.pk }}" tabindex="-1" aria-labelledby="DetailModalLabel{{ book.pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="DetailModalLabel{{ book.pk }}">Detail Buku</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="{{ book.image_url_l }}" alt="book image" style="width: 100%;" />
+                </div>
+                <div class="col-md-6">
+                  <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{ book.title }}</h3>
+                  <h5 class="mb-3">Author: {{ book.author }}</h5>
+                  <h5 class="mb-3">Published Year: {{ book.published_year }}</h5>
+                  <h5 class="mb-3">Publisher: {{ book.publisher }}</h5>
+                  <h5 class="mb-3">ISBN: {{ book.isbn }}</h5>
+                  <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.upvoted_books.all %}
+                          Remove Upvote
+                      {% else %}
+                          Upvote
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <!-- Ganti ke favorite book nanti -->
+                    <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.wishlist_books.all %}
+                          Remove Favorite
+                      {% else %}
+                          Favorite
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="modal-fade" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add Reading History
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -240,7 +297,113 @@
   });
 </script>
 
+<script>
+  // JavaScript to handle wishlist
+  document.addEventListener("DOMContentLoaded", function () {
+      const wishlistButtons = document.querySelectorAll(".wishlist-link");
+      wishlistButtons.forEach(button => {
+          button.addEventListener("click", function (event) {
+              event.preventDefault();
+              const bookId = this.getAttribute("data-book-id");
+              wishlistBook(bookId);
+          });
+      });
 
+      function wishlistBook(bookId) {
+          fetch("{% url 'book:wishlist_book' 0 %}".replace("0", bookId), {
+              method: "POST",
+              credentials: "same-origin",
+              headers: {
+                  "X-CSRFToken": getCookie("csrftoken"), // Make sure you have a function to get the CSRF token
+                  "Content-Type": "application/json",
+              },
+          })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      const button = document.getElementById(`wishlist-button-${bookId}`);
+                      const wishlistText = button.querySelector(".wishlist-link");
+                      if (wishlistText.textContent.trim() === "Wishlist") {
+                          wishlistText.textContent = "Remove Wishlist";
+                      } else {
+                          wishlistText.textContent = "Wishlist";
+                      }
+                  }
+              })
+              .catch(error => {
+                  console.error("Error upvoting book:", error);
+              });
+      }
+
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== "") {
+              var cookies = document.cookie.split(";");
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === name + "=") {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+  });
+</script>
+
+<!-- Tambahkan elemen script ini di bagian bawah halaman Anda atau dalam file JavaScript terpisah -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Ambil elemen formulir dan tombol
+    const form = document.getElementById("form");
+    const lastPageInput = document.getElementById("last_page");
+    const addButton = document.getElementById("button_add");
+
+    // Tambahkan event listener untuk tombol
+    addButton.addEventListener("click", function () {
+      // Ambil nilai last_page dari input
+      const lastPageValue = lastPageInput.value;
+
+      // Kirim data ke server menggunakan AJAX
+      fetch("{% url 'book:simpan_last_page' book.id %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"), // Gantilah sesuai dengan cara Anda mendapatkan CSRF token
+        },
+        body: JSON.stringify({ last_page: lastPageValue }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Di sini Anda dapat menangani respons dari server, jika ada
+          // Contoh: jika server mengembalikan pesan sukses, Anda dapat menampilkan pesan sukses kepada pengguna
+          alert(data.message);
+        })
+        .catch((error) => {
+          // Tangani kesalahan jika terjadi
+          console.error("Error:", error);
+        });
+    });
+
+    // Fungsi untuk mendapatkan CSRF token
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  });
+</script>
 
 
 <style>
@@ -289,6 +452,20 @@
   }
 }
 
+  .modal-content {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  .modal-body {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-body .col-md-6 {
+    max-width: 50%; /* Adjust the maximum width of the text column */
+    word-wrap: break-word; /* Allow long words to wrap */
+  }
 </style>
  
 
@@ -358,5 +535,122 @@
   }
 
   truncateText(); // Call the function to truncate the text
+
+  document.getElementById("id_title").addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission
+        searchBook(); // Call the searchBook function
+    }
+  });
+
+    function searchBook() {
+        const title = document.querySelector('#id_title').value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch("{% url 'book:search_books' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({ title }),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const bookContainer = document.getElementById('book-container');
+            bookContainer.innerHTML = ''; // Clear existing content
+
+            data.books.forEach((book) => {
+                // Create and append the book card
+                const card = document.createElement('div');
+                card.innerHTML = `<div class="py-4 col-xl-3 col-lg-12 align-items-center justify-content-between" style="background-color: white; margin-right: 4px; width: 380px;">
+                <div class="card mb-4 p-4 d-flex flex-row row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
+                  
+                    <img class="col-sm-1" src="${ book.image_url_l }" alt="user" style="width: 130px; height: 100%; margin-right: 4px; background-color: white; margin-bottom: 16px;">
+                    <div class="col-sm-1 content-card d-flex flex-column justify-content-between" style="background-color: white;">
+                        <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
+                            <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
+                                <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
+                                ${ book.rank } 
+                            </div>
+                            <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                                <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                                <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-${ book.pk }">${ book.total_votes }</span></p>
+                            </div>
+                        </div>
+                        <div class="about d-flex flex-column" style="background-color: white;">
+                            <p id="truncatedText" style="margin-bottom: 8px; background-color: white; font-size: 18px; font-weight: 700; 
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            width: 200px;">${ book.title }</p>
+                            <p style="margin-bottom: 0px; background-color: white; font-size: 14px; font-weight: 500;">${ book.author }</p>
+                        </div>
+
+                        <div class="action" style="background-color: white;">
+                            <button data-bs-toggle="modal" data-bs-target="#detailBukuModal${ book.pk }" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="detailBukuModal${ book.pk }" tabindex="-1" aria-labelledby="DetailModalLabel${ book.pk }" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="DetailModalLabel${ book.pk }">Detail Buku</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <img src="${ book.image_url_l }" alt="book image" style="width: 100%;" />
+                        </div>
+                        <div class="col-md-6">
+                          <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">${ book.title }</h3>
+                          <h5 class="mb-3">Author: ${ book.author }</h5>
+                          <h5 class="mb-3">Published Year: ${ book.published_year }</h5>
+                          <h5 class="mb-3">Publisher: ${ book.publisher }</h5>
+                          <h5 class="mb-3">ISBN: ${ book.isbn }</h5>
+                          <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                            <a onclick="upvoteBook(${ book.pk });return false;" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                              {% if book in request.user.userprofile.upvoted_books.all %}
+                                  Remove Upvote
+                              {% else %}
+                                  Upvote
+                              {% endif %}
+                            </a>
+                          </button>
+                          <button class="favorite-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                            <!-- Ganti ke favorite book nanti -->
+                            <a onclick="wishlistBook(${ book.pk });return false;" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                              {% if book in request.user.userprofile.wishlist_books.all %}
+                                  Remove Favorite
+                              {% else %}
+                                  Favorite
+                              {% endif %}
+                            </a>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              `
+                bookContainer.appendChild(card);
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
 </script>
 {% endblock %}
