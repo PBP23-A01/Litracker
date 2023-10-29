@@ -133,13 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-<<<<<<< HEAD
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-=======
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
->>>>>>> 5dadce9d2f43b44588f960e7c7a060d67674df56
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -147,5 +142,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+ 
 LOGIN_URL = 'authentication:index' 
 # kalau belum login tapi akses home akan redirect ke guest page
