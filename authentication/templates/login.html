@@ -6,46 +6,65 @@
 
 {% block content %}
 
+{% load static %}
 
+<style>
+    /* Add CSS for the login card */
+    .login-card {
+        background-color: white; /* Ganti latar belakang menjadi putih */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
+        text-align: center;
+    }
 
-    {% load static %}
-<<<<<<< HEAD
-=======
-    <!-- <img src="{% static 'icon/fire grey.png' %}" alt="My image"> -->
->>>>>>> 60aa0c7e258900bb030f690d46775a6b9ddd56ba
+    /* Add spacing for form elements */
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-<div class = "container-fluid g-0 h-100 d-flex row justify-content-center align-items-center w-100">
-    <h1 class="container-fluid g-0 h-100 d-flex row justify-content-center align-items-center" style="padding-top: 100px; padding-bottom: 40px; font-weight: 700; color: var(--jaguar-950);">Login</h1>
+    /* Add CSS for the Login button */
+    .login_btn {
+        background-color: var(--jaguar-600);
+        border-radius: 16px;
+        color: white;
+        font-weight: 500;
+        width: 100px;
+    }
+</style>
 
-    <form method="POST" action="" class="container-fluid g-0 d-flex justify-content-center align-items-center" >
-        {% csrf_token %}
-        <table class="justify-content-center align-items-center g-0 d-flex">
-            <tr class="d-flex row" style="margin-bottom: 20px;">
-                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username </td>
-                <td class="w-100"><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
+<div class="container-fluid g-0 h-100 d-flex row justify-content-center align-items-center w-100">
+    <div class="login-card">
+        <h1 style="font-weight: 700; color: var(--jaguar-950);">Login</h1>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username" style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username</label>
+                <input type="text" name "username" id="username" class="form-control" placeholder="Username">
+            </div>
                     
-            <tr class="d-flex row">
-                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password </td>
-                <td ><input type="password" name="password" placeholder="Password" class="form-control" style="background-color: white;"></td>
-            </tr>
+            <div class="form-group">
+                <label for "password" style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" style="background-color: white;"> <!-- Ganti latar belakang menjadi putih -->
+            </div>
 
-            
-                <td class="w-100 d-flex container-fluid g-0 "><input class="btn container-fluid login_btn d-flex justify-content-center w-100 align-items-center" style="background-color: var(--jaguar-600); padding-block: 8px; border-radius: 16px; color: white;justify-content: center; align-items: center; margin-block: 40px; font-weight: 500; width: 100px;" type="submit" value="Login"></td>
-            
-        </table>
-    </form>
+            <input class="btn login_btn" style="background-color: var(--jaguar-600); border-radius: 16px; color: white; font-weight: 500; width: 100px;" type="submit" value="Login">
+        </form>
 
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
-        
-    Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}     
 
+        <p style="margin-top: 20px;">Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a></p>
+    </div>
 </div>
 
 {% endblock content %}
