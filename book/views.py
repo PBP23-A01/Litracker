@@ -10,6 +10,9 @@ from book.forms import BookForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
+from reading_history.models import ReadingHistory
+from .forms import ReadingHistoryForm
 
 # Create your views here.
 def get_books(request):
@@ -43,8 +46,6 @@ def show_homepage(request):
 def is_admin(user):
     return user.userprofile.is_admin
 
-@login_required
-@user_passes_test(is_admin)
 def tambah_buku(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -57,20 +58,20 @@ def tambah_buku(request):
 
 @csrf_exempt
 def search_books(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        title = data.get("title", "")
+    search_term = request.GET.get('query', '')  # Mendapatkan kata kunci pencarian atau string kosong jika tidak ada
 
-        if title:
-            # Use Q objects to perform a case-insensitive search on both title and author
-            results = Book.objects.filter(Q(title__icontains=title) | Q(author__icontains=title)).values()
-        else:
-            results = []
-
+    results = []
+    if search_term:
+        results = Book.objects.filter(
+            Q(title__icontains=search_term)    | # Cari judul yang mengandung search_term
+            Q(author__icontains=search_term)   | # Cari penulis yang mengandung search_term
+            Q(publisher__icontains=search_term)| # Cari penerbit yang mengandung search_term
+            Q(published_year__icontains=search_term)
+        )
     else:
-        results = Book.objects.all().values()
-
-    return JsonResponse({'books': list(results)})
+        # Jika query kosong kembali ke homepage
+        return redirect('book:show_homepage')
+    return render(request, 'homepage.html', {'search_term': search_term, 'results': results})
     
 # @login_required
 # def upvote_book(request, book_id):
@@ -120,17 +121,70 @@ def wishlist_book(request, book_id):
 
     return redirect('authentication:index')
 
+@login_required
+def last_page(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
 
-# @login_required
-# def add_upvote(request, book_id):
-#     book = Book.objects.get(pk=book_id)
-#     user_profile = UserProfile.objects.get(user=request.user)
+    if book in user_profile.history_books.all():
+        # User has already upvoted the book, so remove the upvote
+        user_profile.history_books.remove(book)
+        book.progress = 0
+    else:
+        # User has not upvoted the book, so add the upvote
+        user_profile.history_books.add(book)
+        book.progress = last_page
 
-#     if book in user_profile.upvoted_books.all():
-#         # User has already upvoted the book, so remove the upvote
-#         user_profile.upvoted_books.remove(book)
-#     else:
-#         # User has not upvoted the book, so add the upvote
-#         user_profile.upvoted_books.add(book)
+    # Save the changes to both the book and user profile within a transaction
+    with transaction.atomic():
+        user_profile.save()
+        book.save()
 
-#     return redirect('authentication:index', book_id=book_id)
+    # Return a JSON response indicating success or failure
+    return redirect('authentication:index')
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from reading_history.models import ReadingHistory  # Ganti your_app dengan nama aplikasi Anda
+
+@csrf_exempt
+def simpan_last_page(request, book_id):
+    if request.method == 'POST':
+        # Ambil nilai last_page dari permintaan POST
+        last_page = request.POST.get('last_page')
+
+        if last_page is not None:
+            # Simpan nilai last_page ke dalam objek ReadingHistory
+            user = request.user
+            book = Book.objects.get(id=book_id)
+            reading_history, created = ReadingHistory.objects.get_or_create(user=user, book=book)
+            reading_history.last_page = int(last_page)
+            reading_history.save()
+
+            # Berikan respons JSON yang sesuai
+            response_data = {
+                'message': 'Last page saved successfully.',
+                'last_page': reading_history.last_page
+            }
+
+            return JsonResponse(response_data)
+        else:
+            # Jika tidak ada nilai last_page yang diberikan, berikan respons JSON dengan pesan kesalahan
+            response_data = {
+                'error': 'Last page is required.'
+            }
+
+            return JsonResponse(response_data, status=400)
+    else:
+        # Handle metode HTTP selain POST jika diperlukan
+        response_data = {
+            'error': 'Invalid method.'
+        }
+
+        return JsonResponse(response_data, status=405)
+
+
+
+
+def render_form(request):
+    return redirect('book:show_homepage')

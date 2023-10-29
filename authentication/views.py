@@ -6,7 +6,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login, logout
 from book.models import Book
+from django.http import HttpResponse, HttpResponseNotFound
+from django.core import serializers
 from authentication.models import UserProfile
+from authentication.forms import AdminRegistrationForm
 
 # Create your views here.
 
@@ -23,6 +26,25 @@ def register(request):
             return redirect('authentication:login_user')  # Redirect to the login page after successful registration
     context = {'form': form}
     return render(request, 'register.html', context)
+
+def admin_registration(request):
+    if request.method == 'POST':
+        form = AdminRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.is_superuser = True  # Make the user a superuser (admin)
+            user.save()
+            user_profile = UserProfile(user=user)
+            user_profile.userprofile.is_admin = True
+            user_profile.save()
+            login(request, user)
+            messages.success(request, 'Admin account has been successfully created!')
+            return redirect('book:show_homepage')  # Redirect to the desired admin page
+        else:
+            messages.error(request, 'Admin registration failed. Please check the form.')
+    else:
+        form = AdminRegistrationForm()
+    return render(request, 'admin_registration.html', {'form': form})
 
 def login_user(request):
     if request.method == 'POST':

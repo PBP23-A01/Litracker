@@ -2,6 +2,9 @@ from django.shortcuts import render
 from book.models import Book
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect
+from review_book.forms import ReviewForm
+from django.urls import reverse
 
 # Create your views here.
 def show_review(request):
@@ -31,5 +34,13 @@ def add_review_ajax(request):
 
     return HttpResponseNotFound()
     
+def create_review(request):
+    form = ReviewForm(request.POST or None)
 
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('review_book:add_review'))
+
+    context = {'form': form}
+    return render(request, "create_review.html", context)
 

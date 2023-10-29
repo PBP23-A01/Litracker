@@ -5,8 +5,6 @@ from book.models import Book
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
 
-    
-
 @login_required
 def favorite_book(request):
     user_profile = UserProfile.objects.get(user=request.user)
