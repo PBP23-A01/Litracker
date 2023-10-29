@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login, logout
 from book.models import Book
+from django.http import HttpResponse, HttpResponseNotFound
+from django.core import serializers
 from authentication.models import UserProfile
 from authentication.forms import AdminRegistrationForm
 

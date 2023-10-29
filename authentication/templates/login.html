@@ -6,22 +6,46 @@
 
 {% block content %}
 
+{% load static %}
 
+<style>
+    /* Add CSS for the login card */
+    .login-card {
+        background-color: white; /* Ganti latar belakang menjadi putih */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
+        text-align: center;
+    }
 
-    {% load static %}
-    <!-- <img src="{% static 'icon/fire grey.png' %}" alt="My image"> -->
+    /* Add spacing for form elements */
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-<div class = "container-fluid g-0 h-100 d-flex row justify-content-center align-items-center w-100">
-    <h1 class="container-fluid g-0 h-100 d-flex row justify-content-center align-items-center" style="padding-top: 100px; padding-bottom: 40px; font-weight: 700; color: var(--jaguar-950);">Login</h1>
+    /* Add CSS for the Login button */
+    .login_btn {
+        background-color: var(--jaguar-600);
+        border-radius: 16px;
+        color: white;
+        font-weight: 500;
+        width: 100px;
+    }
+</style>
 
-    <form method="POST" action="" class="container-fluid g-0 d-flex justify-content-center align-items-center" >
-        {% csrf_token %}
-        <table class="justify-content-center align-items-center g-0 d-flex">
-            <tr class="d-flex row" style="margin-bottom: 20px;">
-                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username </td>
-                <td class="w-100"><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
-                    
+<div class="container-fluid g-0 h-100 d-flex row justify-content-center align-items-center w-100">
+    <div class="login-card">
+        <h1 style="background-color: white;font-weight: 700; color: var(--jaguar-950);">Login</h1>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group" style="background-color: white;">
+                <label for="username" style="background-color: white; color:var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username</label>
+                <input type="text" name "username" id="username" class="form-control" placeholder="Username">
+            </div>
             <tr class="d-flex row">
                 <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password </td>
                 <td ><input type="password" name="password" placeholder="Password" class="form-control" style="background-color: white;"></td>
@@ -44,7 +68,8 @@
     <center>Belum punya akun? <a href="{% url 'authentication:register' %}">Register Now</a></center>
     <br>
     <center>Kamu Ingin Jadi Admin? <a href="{% url 'authentication:admin_registration' %}">Register as Admin</a></center>
-
+        <p style="margin-top: 20px; background-color: white;"><center>Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a></center></p>
+    </div>
 </div>
 
 {% endblock content %}
