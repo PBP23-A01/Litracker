@@ -28,7 +28,7 @@
           <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
               <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
               <form method="get" id="search-form" action="{% url 'book:search_books' %}">
-                <input name="query" type="text" value="{{ search_term }}" id="searchField" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Cari Judul Buku...">
+                <input name="query" type="text" value="{{ search_term }}" id="searchField" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Cari Buku...">
               </form>
           </div>
       </div>
@@ -50,9 +50,9 @@
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
             {% if user.is_authenticated %}
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Reading History</a></li>
-              {% if user.is_admin %}
-              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'book:add_book' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Add Book</a></li>
-              {% endif %}
+              
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Add Book</a></li>
+              
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
             {% endif %}
           </ul>
