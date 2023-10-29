@@ -147,53 +147,82 @@
                       <p style="margin-bottom: 0px; background-color: white; font-size: 14px; font-weight: 500;">{{ book.author }}</p>
                   </div>
 
-                  <div class="action" style="background-color: white;">
-                      <button data-bs-toggle="modal" data-bs-target="#detailBukuModal{{ book.pk }}" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                          Lihat Detail
-                      </button>
-                  </div>
-              </div>
-          </div>
+                <div class="action" style="background-color: white;">
+                    <button data-bs-toggle="modal" data-bs-target="#detailBukuModal{{ book.pk }}" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                        Lihat Detail
+                    </button>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba(87, 87, 87, 0.034);">
+                  <div class="modal-dialog" style="border-radius: 20px; border-style: none; background-color: white;">
+                      <div class="modal-content" style="border-radius: 20px; border-style: none; background-color: white;">
+                          <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
+                            <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
+                          </div>
+                          <div class="modal-body" style="background-color: white;">
+                            <form id="form" style="background-color: white;" onsubmit="return false;">
+                              {% csrf_token %}
+                              <div class="mb-3" style="background-color: white;">
+                                  <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
+                                  <input type="number" class="form-control" id="last_page" name="last_page"></input>
+                              </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
+                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
+                                <a href="{% url 'book:simpan_last_page' book.pk %}" name="last_page" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                                  Add Reading History
+                                </a>
+                            </button>
+                        </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="detailBukuModal{{ book.pk }}" tabindex="-1" aria-labelledby="DetailModalLabel{{ book.pk }}" aria-hidden="true" style="background-color: rgba(0, 0, 0, 0.2);">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="DetailModalLabel{{ book.pk }}">Detail Buku</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <img src="{{ book.image_url_l }}" alt="book image" style="width: 100%;" />
-                  </div>
-                  <div class="col-md-6">
-                    <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{ book.title }}</h3>
-                    <h5 class="mb-3">Author: {{ book.author }}</h5>
-                    <h5 class="mb-3">Published Year: {{ book.published_year }}</h5>
-                    <h5 class="mb-3">Publisher: {{ book.publisher }}</h5>
-                    <h5 class="mb-3">ISBN: {{ book.isbn }}</h5>
-                    <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                      <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.upvoted_books.all %}
-                            Remove Upvote
-                        {% else %}
-                            Upvote
-                        {% endif %}
-                      </a>
-                    </button>
-                    <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                      <!-- Ganti ke favorite book nanti -->
-                      <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.wishlist_books.all %}
-                            Remove Favorite
-                        {% else %}
-                            Favorite
-                        {% endif %}
-                      </a>
-                    </button>
-                  </div>
+      </div>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="detailBukuModal{{ book.pk }}" tabindex="-1" aria-labelledby="DetailModalLabel{{ book.pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="DetailModalLabel{{ book.pk }}">Detail Buku</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="{{ book.image_url_l }}" alt="book image" style="width: 100%;" />
+                </div>
+                <div class="col-md-6">
+                  <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{ book.title }}</h3>
+                  <h5 class="mb-3">Author: {{ book.author }}</h5>
+                  <h5 class="mb-3">Published Year: {{ book.published_year }}</h5>
+                  <h5 class="mb-3">Publisher: {{ book.publisher }}</h5>
+                  <h5 class="mb-3">ISBN: {{ book.isbn }}</h5>
+                  <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.upvoted_books.all %}
+                          Remove Upvote
+                      {% else %}
+                          Upvote
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <!-- Ganti ke favorite book nanti -->
+                    <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.wishlist_books.all %}
+                          Remove Favorite
+                      {% else %}
+                          Favorite
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="modal-fade" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add Reading History
+                  </button>
                 </div>
               </div>
             </div>
@@ -232,60 +261,84 @@
                       <p style="margin-bottom: 0px; background-color: white; font-size: 14px; font-weight: 500;">{{ book.author }}</p>
                   </div>
 
-                  <div class="action" style="background-color: white;">
-                      <button data-bs-toggle="modal" data-bs-target="#detailBukuModal{{ book.pk }}" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                          Lihat Detail
-                      </button>
-                  </div>
-              </div>
-          </div>
+                <div class="action" style="background-color: white;">
+                    <button data-bs-toggle="modal" data-bs-target="#detailBukuModal{{ book.pk }}" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                        Lihat Detail
+                    </button>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba(87, 87, 87, 0.034);">
+                  <div class="modal-dialog" style="border-radius: 20px; border-style: none; background-color: white;">
+                      <div class="modal-content" style="border-radius: 20px; border-style: none; background-color: white;">
+                          <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
+                            <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
+                          </div>
+                          <div class="modal-body" style="background-color: white;">
+                            <form id="form" style="background-color: white;">
+                                {% csrf_token %}
+                                <div class="mb-3" style="background-color: white;">
+                                    <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px;">Last Page:</label>
+                                    <input type="number" class="form-control" id="last_page" name="last_page">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="button_add" data-book-id="{{ book.pk }}" data-bs-dismiss="modal">Save Last Page</button>
+                        </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="detailBukuModal{{ book.pk }}" tabindex="-1" aria-labelledby="DetailModalLabel{{ book.pk }}" aria-hidden="true" style="background-color: rgba(0, 0, 0, 0.2);">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="DetailModalLabel{{ book.pk }}">Detail Buku</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <img src="{{ book.image_url_l }}" alt="book image" style="width: 100%;" />
-                  </div>
-                  <div class="col-md-6">
-                    <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{ book.title }}</h3>
-                    <h5 class="mb-3">Author: {{ book.author }}</h5>
-                    <h5 class="mb-3">Published Year: {{ book.published_year }}</h5>
-                    <h5 class="mb-3">Publisher: {{ book.publisher }}</h5>
-                    <h5 class="mb-3">ISBN: {{ book.isbn }}</h5>
-                    <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                      <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.upvoted_books.all %}
-                            Remove Upvote
-                        {% else %}
-                            Upvote
-                        {% endif %}
-                      </a>
-                    </button>
-                    <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
-                      <!-- Ganti ke favorite book nanti -->
-                      <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                        {% if book in request.user.userprofile.wishlist_books.all %}
-                            Remove Favorite
-                        {% else %}
-                            Favorite
-                        {% endif %}
-                      </a>
-                    </button>
-                  </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="detailBukuModal{{ book.pk }}" tabindex="-1" aria-labelledby="DetailModalLabel{{ book.pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="DetailModalLabel{{ book.pk }}">Detail Buku</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="{{ book.image_url_l }}" alt="book image" style="width: 100%;" />
+                </div>
+                <div class="col-md-6">
+                  <h3 class="mb-3" style="font-size: 32px; font-weight: 1000; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{ book.title }}</h3>
+                  <h5 class="mb-3">Author: {{ book.author }}</h5>
+                  <h5 class="mb-3">Published Year: {{ book.published_year }}</h5>
+                  <h5 class="mb-3">Publisher: {{ book.publisher }}</h5>
+                  <h5 class="mb-3">ISBN: {{ book.isbn }}</h5>
+                  <button class="upvote-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.upvoted_books.all %}
+                          Remove Upvote
+                      {% else %}
+                          Upvote
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <!-- Ganti ke favorite book nanti -->
+                    <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.wishlist_books.all %}
+                          Remove Favorite
+                      {% else %}
+                          Favorite
+                      {% endif %}
+                    </a>
+                  </button>
+                  <button class="modal-fade" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Read Book
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {% endfor %}
-      {% endif %}
+      </div>
+      {% endfor %}
     </div>
   </div>
   
@@ -404,6 +457,55 @@
   });
 </script>
 
+<script>
+  document.getElementById('button_add').addEventListener('click', function () {
+      var bookId = this.getAttribute('data-book-id');
+      var lastPage = document.getElementById('last_page').value;
+
+      const requestData = {
+          last_page: lastPage
+      };
+
+      // Send an AJAX request to the view to save the last page
+      fetch(`/book/save_last_page/${bookId}/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'), // Get the CSRF token
+          },
+          body: JSON.stringify(requestData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        const lastPage = data.last_page;
+        console.log("Last Page:", lastPage);
+          if (data.message) {
+              // Success message
+              alert(data.message);
+          } else {
+              // Handle errors here
+              alert('Error: ' + data.error);
+          }
+      });
+  });
+
+  // Function to get the CSRF token from cookies
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              // Search for a cookie with the given name
+              if (cookie.substring(0, name.length + 1) === name + '=') {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+</script>
 
 <style>
   body {
@@ -535,4 +637,5 @@
 
   truncateText(); // Call the function to truncate the text
 </script>
+{% endif %}
 {% endblock %}

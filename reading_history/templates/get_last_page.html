@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Last Page</title>
+</head>
+<body>
+    <h1>Last Page for {{ book.title }}</h1>
+    {% if last_page %}
+        <p>Last Page: {{ last_page }}</p>
+    {% else %}
+        <p>No review found for this book by the logged-in user.</p>
+    {% endif %}
+</body>
+</html>
