@@ -37,11 +37,18 @@
           <div class="vertical-line"></div>
 
           <a class="nav-text-secondary nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 12px;">
-              Halo, {{ user.username }}
+            {% if user.is_authenticated %}
+              Halo, {{ user.username }}!
+            {% endif %}
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
-              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Acount Info</a></li>
+            {% if user.is_authenticated %}
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Reading History</a></li>
+              {% if user.is_admin %}
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'book:add_book' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Add Book</a></li>
+              {% endif %}
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
+            {% endif %}
           </ul>
 
 
@@ -55,8 +62,7 @@
 </div>
 
 
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">

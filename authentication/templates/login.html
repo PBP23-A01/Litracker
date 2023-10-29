@@ -36,12 +36,14 @@
     {% if messages %}
         <ul>
             {% for message in messages %}
-                <li>{{ message }}</li>
+                <center><li>{{ message }}</li></center>
             {% endfor %}
         </ul>
     {% endif %}     
         
-    <center>Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a></center>
+    <center>Belum punya akun? <a href="{% url 'authentication:register' %}">Register Now</a></center>
+    <br>
+    <center>Kamu Ingin Jadi Admin? <a href="{% url 'authentication:admin_registration' %}">Register as Admin</a></center>
 
 </div>
 
