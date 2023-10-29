@@ -46,8 +46,6 @@ def show_homepage(request):
 def is_admin(user):
     return user.userprofile.is_admin
 
-@login_required
-@user_passes_test(is_admin)
 def tambah_buku(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -188,16 +186,5 @@ def simpan_last_page(request, book_id):
 
 
 
-# @login_required
-# def add_upvote(request, book_id):
-#     book = Book.objects.get(pk=book_id)
-#     user_profile = UserProfile.objects.get(user=request.user)
-
-#     if book in user_profile.upvoted_books.all():
-#         # User has already upvoted the book, so remove the upvote
-#         user_profile.upvoted_books.remove(book)
-#     else:
-#         # User has not upvoted the book, so add the upvote
-#         user_profile.upvoted_books.add(book)
-
-#     return redirect('authentication:index', book_id=book_id)
+def render_form(request):
+    return redirect('book:show_homepage')

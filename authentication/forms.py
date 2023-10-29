@@ -10,3 +10,11 @@ class UserRegistrationForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
     class Meta:
         model = User
+
+class AdminRegistrationForm(UserCreationForm):
+    username = forms.CharField(max_length=150)
+    password1 = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']

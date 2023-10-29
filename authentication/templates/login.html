@@ -46,23 +46,28 @@
                 <label for="username" style="background-color: white; color:var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username</label>
                 <input type="text" name "username" id="username" class="form-control" placeholder="Username">
             </div>
-                    
-            <div class="form-group" style="background-color: white;">
-                <label for "password" style="background-color: white;color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password" style="background-color: white;"> <!-- Ganti latar belakang menjadi putih -->
-            </div>
+            <tr class="d-flex row">
+                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password </td>
+                <td ><input type="password" name="password" placeholder="Password" class="form-control" style="background-color: white;"></td>
+            </tr>
 
-            <input class="btn login_btn" style="background-color: white; background-color: var(--jaguar-600); border-radius: 16px; color: white; font-weight: 500; width: 100px;" type="submit" value="Login">
-        </form>
+            
+                <td class="w-100 d-flex container-fluid g-0 "><input class="btn container-fluid login_btn d-flex justify-content-center w-100 align-items-center" style="background-color: var(--jaguar-600); padding-block: 8px; border-radius: 16px; color: white;justify-content: center; align-items: center; margin-block: 40px; font-weight: 500; width: 100px;" type="submit" value="Login"></td>
+            
+        </table>
+    </form>
 
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}     
-
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <center><li>{{ message }}</li></center>
+            {% endfor %}
+        </ul>
+    {% endif %}     
+        
+    <center>Belum punya akun? <a href="{% url 'authentication:register' %}">Register Now</a></center>
+    <br>
+    <center>Kamu Ingin Jadi Admin? <a href="{% url 'authentication:admin_registration' %}">Register as Admin</a></center>
         <p style="margin-top: 20px; background-color: white;"><center>Don't have an account yet? <a href="{% url 'authentication:register' %}">Register Now</a></center></p>
     </div>
 </div>
