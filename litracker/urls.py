@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from book.views import simpan_last_page
 
 urlpatterns = [
     path('home/', include("book.urls")),
@@ -24,5 +25,6 @@ urlpatterns = [
     path('review_book/', include('review_book.urls')),
     path('reading_history/', include('reading_history.urls')),
     path('favorite_book/', include('favorite_book.urls')),
+    path('simpan_last_page/<int:book_id>/', simpan_last_page, name='simpan_last_page'),
     path('admin/', admin.site.urls),
 ]
