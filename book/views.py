@@ -60,20 +60,20 @@ def tambah_buku(request):
 
 @csrf_exempt
 def search_books(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        title = data.get("title", "")
+    search_term = request.GET.get('query', '')  # Mendapatkan kata kunci pencarian atau string kosong jika tidak ada
 
-        if title:
-            # Use Q objects to perform a case-insensitive search on both title and author
-            results = Book.objects.filter(Q(title__icontains=title) | Q(author__icontains=title)).values()
-        else:
-            results = []
-
+    results = []
+    if search_term:
+        results = Book.objects.filter(
+            Q(title__icontains=search_term)    | # Cari judul yang mengandung search_term
+            Q(author__icontains=search_term)   | # Cari penulis yang mengandung search_term
+            Q(publisher__icontains=search_term)| # Cari penerbit yang mengandung search_term
+            Q(published_year__icontains=search_term)
+        )
     else:
-        results = Book.objects.all().values()
-
-    return JsonResponse({'books': list(results)})
+        # Jika query kosong kembali ke homepage
+        return redirect('book:show_homepage')
+    return render(request, 'homepage.html', {'search_term': search_term, 'results': results})
     
 # @login_required
 # def upvote_book(request, book_id):
@@ -145,18 +145,25 @@ def last_page(request, book_id):
     # Return a JSON response indicating success or failure
     return redirect('authentication:index')
 
+from django.http import JsonResponse
+from reading_history.models import ReadingHistory
+
 def simpan_last_page(request, book_id):
     # Ambil objek ReadingHistory yang sesuai dengan user dan buku
     user = request.user
     book = Book.objects.get(id=book_id)
-    reading_history, created = ReadingHistory.objects.get_or_create(user=user, book=book)
+    try:
+        reading_history = ReadingHistory.objects.get(user=user, book=book)
+    except ReadingHistory.DoesNotExist:
+        # Jika objek tidak ada, Anda mungkin ingin membuatnya
+        reading_history = ReadingHistory(user=user, book=book)
 
     # Ambil nilai last_page dari permintaan POST
     last_page = request.POST.get('last_page')
 
     if last_page is not None:
         # Simpan nilai last_page ke dalam objek ReadingHistory
-        reading_history.last_page = last_page
+        reading_history.last_page = int(last_page)
         reading_history.save()
 
         # Berikan respons JSON yang sesuai

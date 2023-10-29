@@ -129,33 +129,30 @@
                 </div>
 
                 <div class="action" style="background-color: white;">
-                    <button id="lihatDetailBtn" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <button id="lihatDetailBtn" onclick="openModal('{{ book.pk }}'); return false;" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                         Lihat Detail
                     </button>
                 </div>
-                <!-- Modal -->
-                <div id="loginModal" class="modal">
-                  <div class="modal-content">
-                      <span class="close">&times;</span>
-                      <h5>Silahkan login terlebih dahulu.</h5>
-                      
-                      <button style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700;">
-                        <a href="{% url 'authentication:login_user' %}" style="background-color: var(--jaguar-600); border-style: none; text-decoration: none; color: white;">Masuk</a>
-                      </button>
-
-                  </div>
-                </div>
-
             </div>
           
         </div>
         
       </div>
       {% endfor %}
+      <!-- Modals buat minta login -->
+      {% for book in books %}
+      <div id="loginModal{{ book.pk }}" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('{{ book.pk }}'); return false;">&times;</span>
+          <h5>Silahkan login terlebih dahulu.</h5>
+          <button style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700;">
+            <a href="{% url 'authentication:login_user' %}" style="background-color: var(--jaguar-600); border-style: none; text-decoration: none; color: white;">Masuk</a>
+          </button>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
-  
-  
 </div>
 
 
@@ -343,6 +340,16 @@
       if (event.target == modal) {
           modal.style.display = "none";
       }
+  }
+
+  function openModal(bookId) {
+    var modal = document.getElementById("loginModal" + bookId);
+    modal.style.display = "block";
+  }
+
+  function closeModal(bookId) {
+    var modal = document.getElementById("loginModal" + bookId);
+    modal.style.display = "none";
   }
 </script>
 {% endblock %}
