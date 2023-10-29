@@ -102,6 +102,24 @@ def upvote_book(request, book_id):
     # Return a JSON response indicating success or failure
     return redirect('authentication:index')
 
+@login_required
+def wishlist_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if book in user_profile.wishlist_books.all():
+        user_profile.wishlist_books.remove(book)
+        book.total_wishlist -= 1
+    else:
+        user_profile.wishlist_books.add(book)
+        book.total_wishlist += 1
+
+    with transaction.atomic():
+        user_profile.save()
+        book.save()
+
+    return redirect('authentication:index')
+
 
 # @login_required
 # def add_upvote(request, book_id):

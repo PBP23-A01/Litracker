@@ -135,7 +135,7 @@
                       </div>
                       <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                         <img src="{% static 'icon/love grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_wishlist }}</span></p>
                       </div>
                     </div>
                 </div>
@@ -184,10 +184,10 @@
                       {% endif %}
                     </a>
                   </button>
-                  <button class="favorite-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                  <button class="wishlist-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                     <!-- Ganti ke favorite book nanti -->
-                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                      {% if book in request.user.userprofile.upvoted_books.all %}
+                    <a href="{% url 'book:wishlist_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                      {% if book in request.user.userprofile.wishlist_books.all %}
                           Remove Favorite
                       {% else %}
                           Favorite
@@ -263,7 +263,61 @@
   });
 </script>
 
+<script>
+  // JavaScript to handle wishlist
+  document.addEventListener("DOMContentLoaded", function () {
+      const wishlistButtons = document.querySelectorAll(".wishlist-link");
+      wishlistButtons.forEach(button => {
+          button.addEventListener("click", function (event) {
+              event.preventDefault();
+              const bookId = this.getAttribute("data-book-id");
+              wishlistBook(bookId);
+          });
+      });
 
+      function wishlistBook(bookId) {
+          fetch("{% url 'book:wishlist_book' 0 %}".replace("0", bookId), {
+              method: "POST",
+              credentials: "same-origin",
+              headers: {
+                  "X-CSRFToken": getCookie("csrftoken"), // Make sure you have a function to get the CSRF token
+                  "Content-Type": "application/json",
+              },
+          })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      const button = document.getElementById(`wishlist-button-${bookId}`);
+                      const wishlistText = button.querySelector(".wishlist-link");
+                      if (wishlistText.textContent.trim() === "Wishlist") {
+                          wishlistText.textContent = "Remove Wishlist";
+                      } else {
+                          wishlistText.textContent = "Wishlist";
+                      }
+                  }
+              })
+              .catch(error => {
+                  console.error("Error upvoting book:", error);
+              });
+      }
+
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== "") {
+              var cookies = document.cookie.split(";");
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === name + "=") {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+  });
+</script>
 
 
 <style>
@@ -490,8 +544,8 @@
                           </button>
                           <button class="favorite-button" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                             <!-- Ganti ke favorite book nanti -->
-                            <a onclick="upvoteBook(${ book.pk });return false;" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                              {% if book in request.user.userprofile.upvoted_books.all %}
+                            <a onclick="wishlistBook(${ book.pk });return false;" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                              {% if book in request.user.userprofile.wishlist_books.all %}
                                   Remove Favorite
                               {% else %}
                                   Favorite
