@@ -128,9 +128,15 @@
                         <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
                         {{ book.rank }} 
                     </div>
-                    <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                    <div class="d-flex flex-row">
+                      <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                         <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px; margin-right: 10px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
+                      </div>
+                      <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
+                        <img src="{% static 'icon/love grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
                         <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;"><span id="votes-{{ book.pk }}">{{ book.total_votes }}</span></p>
+                      </div>
                     </div>
                 </div>
                 <div class="about d-flex flex-column" style="background-color: white;">
