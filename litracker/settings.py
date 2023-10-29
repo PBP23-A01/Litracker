@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'review_book',
     'authentication',
     'favorite_book',
+    'review',
 ]
 
 MIDDLEWARE = [

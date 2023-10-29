@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'review_book'
+app_name = 'review'
 urlpatterns = [
     path('', views.show_review, name='show_review'),
     path('book_detail/<int:book_id>/', views.book_detail, name='book_detail'),

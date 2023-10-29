@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ book.title }}</h1>
+  <p>Author: {{ book.author }}</p>
+  <p>Publication Date: {{ book.published_year }}</p>
+
+  <h2>Reviews</h2>
+  <ul>
+    {% for review in reviews %}
+      <li>
+        <p>{{ review.content }}</p>
+        <p>By: {{ review.user.username }}</p>
+        <p>Created at: {{ review.created_at }}</p>
+        {% if user == review.user %}
+          <button class="delete-review" data-review-id="{{ review.id }}" data-url="{% url 'review:delete_review' review_id=review.id %}">Delete</button>
+        {% endif %}
+      </li>
+    {% endfor %}
+    
+  </ul>
+
+  {% if user.is_authenticated %}
+    <h2>Add Review</h2>
+    <form id="add-review-form" method="post" action="{% url 'review:add_review' book.id %}">
+        {% csrf_token %}
+        <textarea name="content" rows="4" cols="50"></textarea>
+        <button type="submit">Submit Review</button>
+    </form>
+  {% else %}
+    <p>You must be logged in to leave a review.</p>
+  {% endif %}
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Add a review using Ajax
+    $("#add-review-form").submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'review:add_review' book.id %}",
+        data: $(this).serialize(),
+        success: function(data) {
+          if (data.status === "success") {
+            // Reload the page to show the updated reviews
+            location.reload();
+          } else {
+            alert(data.message);
+          }
+        }
+      });
+    });
+
+    // Delete a review using Ajax
+    $(".delete-review").click(function() {
+      var reviewId = $(this).data("review-id");
+      var deleteUrl = $(this).data("url"); // Get the URL from data-url
+      $.ajax({
+        type: "POST",
+        url: deleteUrl, // Use the deleteUrl
+        data: { review_id: reviewId },
+        success: function(data) {
+          if (data.status === "success") {
+            // Reload the page to remove the deleted review
+            location.reload();
+          } else {
+            alert(data.message);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock content %}

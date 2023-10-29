@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>List of Books</h1>
+  <ul>
+    {% for book in books %}
+      <li>
+        <h2><a href="{% url 'review:book_detail' book.id %}">{{ book.title }}</a></h2>
+        <p>Author: {{ book.author }}</p>
+        <p>ISBN: {{ book.isbn }}</p>
+        <p>Published Year: {{ book.published_year }}</p>
+        <p>Publisher: {{ book.publisher }}</p>
+        <!-- Add more details as needed -->
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
