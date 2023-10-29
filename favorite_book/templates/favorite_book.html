@@ -87,20 +87,20 @@
         <img src="{% static 'icon/user grey.png' %}" alt="user" style="padding: 16px; height: 80px; width: 80px; background-color: var(--kashmir-blue-100); border-radius: 20px;">
         <div class="text-xl-black py-3">Halo, {{ user.username }}</div>
         <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
-            <img src="{% static 'icon/upvote blue.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: var(--jaguar-100); border-radius: 12px; margin-right: 8px;">
-            <div class="text-lg-black">Buku Terupvote</div>
+            <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: white; border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-grey"><a class="text-lg-grey" href="{% url 'upvote_book:upvote_book' %}" style="text-decoration: none; background-color: white;">Buku Terupvote</a></div>
         </div>
         <div class="upvote d-flex align-items-center justify-content-start flex-row mt-5 w-100" style="height: 80px; background-color: white;">
-            <img src="{% static 'icon/love grey.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: white; border-radius: 12px; margin-right: 8px;">
-            <div class="text-lg-grey"><a class="text-lg-grey" href="{% url 'favorite_book:favorite_book' %}" style="text-decoration: none; background-color: white;">Wishlist Kamu</a></div>
+            <img src="{% static 'icon/love red.png' %}" alt="user" style="padding:8px; height: 40px; width: 40px; background-color: var(--coral-red-50); border-radius: 12px; margin-right: 8px;">
+            <div class="text-lg-black">Wishlist Kamu</a></div>
         </div>
     </div>
     
     <div class="col-10 d-flex p-5 flex-column" style="background-color: white;  border-radius: 40px; margin-left: 40px;">
-        <div class="text-2xl-black">List Upvote Kamu</div>
+        <div class="text-2xl-black">Buku Tersimpan</div>
 
         <div class="allcards row" style="background-color: white;">
-            {% for book in upvoted_books %}
+            {% for book in favorite_book %}
                 <div class="py-5 col-xl-6 col-lg-12" style="background-color: white;">
                     <div class="card mb-4 p-5 d-flex flex-row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
                         <img src="{{ book.image_url_l }}" alt="user" style="width: 145px; height: 232px; margin-right: 40px;">
@@ -108,8 +108,8 @@
                             <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
                                 
                                 <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
-                                    <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                                    <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_votes }}</p>
+                                    <img src="{% static 'icon/love grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+                                    <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700;">{{ book.total_wishlist }} orang juga menyimpan ini.</p>
                                 </div>
                             </div>
                             <div class="about d-flex flex-column" style="background-color: white;">
@@ -117,9 +117,9 @@
                                 <p style="margin-bottom: 0px; background-color: white;">{{ book.author }}</p>
                             </div>
                             <div class="action" style="background-color: white;">
-                                <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
-                                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                                        {% if book in request.user.userprofile.upvoted_books.all %}
+                                <button style="background-color: var(--coral-red-400); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 18px; font-weight: 700;">
+                                    <a href="{% url 'book:upvote_book' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--coral-red-400);">
+                                        {% if book in request.user.userprofile.wishlist_books.all %}
                                             Batalkan Vote
                                         {% endif %}
                                       </a>
