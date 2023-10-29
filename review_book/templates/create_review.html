@@ -1,4 +1,4 @@
-<!-- {% extends 'base.html' %} 
+{% extends 'base.html' %} 
 
 {% block content %}
 <h1>Add New Review</h1>
@@ -17,23 +17,3 @@
 </form>
 
 {% endblock %}
- -->
-
- <!DOCTYPE html>
- <html>
- <head>
-     <title>Add Review</title>
- </head>
- <body>
-     <h1>Add a Review</h1>
-     
-     <form method="post">
-         {% csrf_token %}
-         {{ form.as_p }}
-         <button type="submit">Submit Review</button>
-     </form>
-     
-     <a href="{% url 'review_book' %}">Back to Book Details</a>
- </body>
- </html>
- 

@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from book.models import Book
 from django.core import serializers
@@ -35,39 +34,12 @@ def add_review_ajax(request):
 
     return HttpResponseNotFound()
     
-# def show_create_review(request):
-#     form = ProductForm(request.POST or None)
+def create_review(request):
+    form = ReviewForm(request.POST or None)
 
-#     if form.is_valid() and request.method == "POST":
-#         form.save()
-#         return HttpResponseRedirect(reverse('review_book:add_review'))
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('review_book:add_review'))
 
-#     context = {'form': form}
-#     return render(request, "create_review.html", context)
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import ReviewBook
-from review_book.forms import ReviewForm
-
-@login_required
-def show_create_review(request, book_id):
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            # Ambil buku yang akan diulas
-            book = Book.objects.get(pk=book_id)
-
-            # Simpan ulasan ke database
-            review = form.save(commit=False)
-            review.user = request.user
-            review.book = book
-            review.save()
-
-            return redirect('review_book', book_id=book_id)  # Ganti 'book_detail' dengan nama view untuk detail buku
-
-    else:
-        form = ReviewForm()
-
-    return render(request, 'review_book:add_review.html', {'form': form})
-
+    context = {'form': form}
+    return render(request, "create_review.html", context)
