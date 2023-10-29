@@ -1,8 +1,3 @@
-review_book.html:
-
-<!DOCTYPE html>
-<html lang="en">
-
 {% extends 'base.html' %}
 
 {% load static %}
@@ -15,34 +10,29 @@ review_book.html:
       <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-start" style="background-color: white;"> 
           <img src="{% static 'icon/logo nav.png' %}" alt="Logo Litracker" style="background-color: white; margin-right: 40px; width: 40px; height: 40px;">
           <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white; margin-right: 40px; ">
-              <img src="{% static 'icon/fire purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-              <div class="nav-text-primary d-flex">Rekomendasi Buku</div>
+              <img src="{% static 'icon/fire grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <a href="{% url 'book:show_homepage' %}" style="text-decoration: none;">
+                <div class="nav-text-secondary d-flex">Rekomendasi Buku</div>
+              </a>
           </div>
           <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
-              <img src="{% static 'icon/tag grey.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <img src="{% static 'icon/tag purple.png' %}" alt="rekomendasi" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
+              <div class="nav-text-primary d-flex" >Ulasan</div>
           </div>
 
           <div class=" g-0 d-flex flex-row align-items-center justify-content-start" style="background-color: white;">
-            <a href="{% url 'review_book:show_review' %}" style="text-decoration: none;">
-              <div class="nav-text-secondary d-flex" >Ulasan</div>
-            </a>
+            
           </div>
              
       </div>
-      <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
-          <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
-              <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
-              <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
-              <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
-          </div>
-      </div>
+
       <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
           <div class="vertical-line"></div>
           <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
             <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
           </div>
           <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-              <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+            <a href="{% url 'favorite_book:favorite_book' %}"><img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);"></a>
           </div>
           <div class="vertical-line"></div>
 
@@ -89,7 +79,7 @@ review_book.html:
       {% for book in books %}
       <div class="bg-white p-6 rounded-lg shadow-lg mb-20 relative extended-card">
           <div class="aspect-w-3 aspect-h-2 bg-white-200">
-              <img src={{ book.image_url_s }}
+              <img src="{{ book.image_url_l }}"
                   alt="Product image" class="object-cover object-center w-full h-1/2">
           </div>
           <div class="mt-4 bg-white-200">

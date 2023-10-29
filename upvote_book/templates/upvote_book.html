@@ -25,20 +25,14 @@
             </div>
                
         </div>
-        <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
-            <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
-                <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
-                <input type="text" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Search">
-                <!-- <div class="d-flex align-items-center h-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500);">Search</div> -->
-            </div>
-        </div>
+
         <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
             <div class="vertical-line"></div>
             <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
               <a href="{% url 'upvote_book:upvote_book' %}"><img src="{% static 'icon/upvote white.png' %}" alt="upvote" style="height: 24px; width: 24px; background-color: var(--jaguar-600);"></a>
             </div>
             <div class="wishlist" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--coral-red-400); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-                <img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);">
+                <a href="{% url 'favorite_book:favorite_book' %}"><img src="{% static 'icon/love white.png' %}" alt="wishlist" style="height: 24px; width: 24px; background-color: var(--coral-red-400);"></a>
             </div>
             <div class="vertical-line"></div>
   
