@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Book Details</h1>
+    
+    <div class="book-details">
+        <img src="{% your_image_url_here %}" alt="Book Cover">
+        <h2>{% your_book_title_here %}</h2>
+        <p>Author: {% your_book_author_here %}</p>
+        <p>Year Publish: {% your_year_published_here %}</p>
+    </div>
+
+    <form method="post" action="{% your_save_book_url_here %}">
+        {% csrf_token %}
+        <input type="submit" value="Tambahkan ke Reading History">
+    </form>
+</body>
+</html>
