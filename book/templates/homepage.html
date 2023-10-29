@@ -170,12 +170,8 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
                             <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
-                                <a href="{% url 'book:simpan_last_page' book.pk %}" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
-                                    {% if book in request.user.userprofile.history_books.all %}
-                                        Remove Reading History
-                                    {% else %}
-                                        Add Reading History
-                                    {% endif %}
+                                <a href="{% url 'book:simpan_last_page' book.pk %}" name="last_page" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                                  Add Reading History
                                 </a>
                             </button>
                         </div>                        
@@ -334,7 +330,7 @@
                     </a>
                   </button>
                   <button class="modal-fade" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Riwayat Bacaan
+                    Read Book
                   </button>
                 </div>
               </div>
@@ -466,6 +462,10 @@
       var bookId = this.getAttribute('data-book-id');
       var lastPage = document.getElementById('last_page').value;
 
+      const requestData = {
+          last_page: lastPage
+      };
+
       // Send an AJAX request to the view to save the last page
       fetch(`/book/save_last_page/${bookId}/`, {
           method: 'POST',
@@ -473,10 +473,12 @@
               'Content-Type': 'application/json',
               'X-CSRFToken': getCookie('csrftoken'), // Get the CSRF token
           },
-          body: JSON.stringify({ 'last_page': lastPage }),
+          body: JSON.stringify(requestData),
       })
       .then(response => response.json())
       .then(data => {
+        const lastPage = data.last_page;
+        console.log("Last Page:", lastPage);
           if (data.message) {
               // Success message
               alert(data.message);
