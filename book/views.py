@@ -57,20 +57,20 @@ def tambah_buku(request):
 
 @csrf_exempt
 def search_books(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        title = data.get("title", "")
+    search_term = request.GET.get('query', '')  # Mendapatkan kata kunci pencarian atau string kosong jika tidak ada
 
-        if title:
-            # Use Q objects to perform a case-insensitive search on both title and author
-            results = Book.objects.filter(Q(title__icontains=title) | Q(author__icontains=title)).values()
-        else:
-            results = []
-
+    results = []
+    if search_term:
+        results = Book.objects.filter(
+            Q(title__icontains=search_term)    | # Cari judul yang mengandung search_term
+            Q(author__icontains=search_term)   | # Cari penulis yang mengandung search_term
+            Q(publisher__icontains=search_term)| # Cari penerbit yang mengandung search_term
+            Q(published_year__icontains=search_term)
+        )
     else:
-        results = Book.objects.all().values()
-
-    return JsonResponse({'books': list(results)})
+        # Jika query kosong kembali ke homepage
+        return redirect('book:show_homepage')
+    return render(request, 'homepage.html', {'search_term': search_term, 'results': results})
     
 # @login_required
 # def upvote_book(request, book_id):
