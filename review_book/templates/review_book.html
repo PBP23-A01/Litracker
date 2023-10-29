@@ -27,7 +27,15 @@
           </div>
              
       </div>
-
+      <div class="container-fluid w-100 h-100 d-flex align-items-center" style="background-color: white;">
+          <div class="search w-100 d-flex flex-row align-items-center justify-content-between" style="background-color: var(--kashmir-blue-100); height: 100%; border-radius: 20px; padding-left: 12px;">
+              <img src="{% static 'icon/search grey.png' %}" alt="search" style="width: 24px; height: 24px; margin-right: 12px; background-color: var(--kashmir-blue-100);">
+              <form method="post" id="search-form">
+                {% csrf_token %}
+                <input type="text" id="search-input" class="form-control d-flex align-items-center h-100 w-100" style="background-color: var(--kashmir-blue-100); color: var(--kashmir-blue-500); border-radius: 0px 20px 20px 0px; border-style: none;" placeholder="Cari Judul Buku...">
+              </form>
+          </div>
+      </div>
       <div class="container-fluid col-lg-5 h-100 d-flex flex-row align-items-center justify-content-end" style="background-color: white;">
           <div class="vertical-line"></div>
           <div class="upvote" style="height: 56px; width: 56px; margin-right: 20px; background-color: var(--jaguar-600); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
@@ -503,4 +511,8 @@
         });
     }
 </script>
+<<<<<<< HEAD
 {% endblock %}
+=======
+{% endblock %}
+>>>>>>> c13a176eadd066e3d76f82cfc0252ef20e09ede8
