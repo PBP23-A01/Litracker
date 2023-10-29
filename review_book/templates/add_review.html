@@ -56,14 +56,39 @@
         
         <!-- Pindahkan tombol "Add Review" ke dalam kartu kedua -->
         
-        <button class="bg-purple-500 hover:bg-purple-600 absolute top-200 right-32 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-            </svg>
-            <span class="ml-2" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add Review</span>
-            
-        </button>
+    
+
+        <table>
+            <!-- <tr>
+                <th>Name</th>
+                <th>Ulasan</th>
+            </tr> -->
+
+            {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+
+            {% for book in ReviewBook %}
+                <tr>
+                    <td>{{ReviewBook.name}}</td>
+                    <td>{{ReviewBook.ulasan}}</td>
+                    <!-- <td>{{product.description}}</td> -->
+                    <!-- <td>{{product.date_added}}</td> -->
+                </tr>
+            {% endfor %}
+        </table>
+        <br />
+        <a href="{% url 'review_book:show_create_review' %}">
+            <button class="bg-purple-500 hover:bg-purple-600 absolute top-200 right-32 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                </svg>
+                <span class="ml-2" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add Review</span>
+                
+            </button>
+
+        </a>
+
+
        
 
         <div class="ml-auto bg-purple-500 hover:bg-purple-600 absolute top-250 left-25 p-2 text-white font-bold px-4 rounded" style="display: flex; align-items: center;"> </div>
