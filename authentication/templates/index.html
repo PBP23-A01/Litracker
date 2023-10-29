@@ -101,16 +101,16 @@
       <div class="py-4 col-xl-3 col-lg-12 align-items-center justify-content-between" style="background-color: white; margin-right: 4px; width: 380px;">
         <div class="card mb-4 p-4 d-flex flex-row row shadow-sm" style="border-radius: 20px; border-color: var(--kashmir-blue-100); background-color: white;">
           
-            <img class="col-sm-1" src="{{ book.image_url_l }}" alt="user" style="width: 100px; height: 100%; margin-right: 40px; background-color: white; margin-bottom: 16px;">
+            <img class="col-sm-1" src="{{ book.image_url_l }}" alt="user" style="width: 130px; height: 100%; margin-right: 4px; background-color: white; margin-bottom: 16px;">
             <div class="col-sm-1 content-card d-flex flex-column justify-content-between" style="background-color: white;">
                 <div class="rank d-flex flex-column justify-content-center align-items-start" style="background-color: white;">
                     <div class="trophy d-flex d-flex align-items-center justify-content-start" style="font-size: 24px; font-weight: 700; color: var(--jaguar-500); background-color: var(--jaguar-50); padding-inline: 12px; padding-block: 4px; margin-bottom: 8px; border-radius: 12px;">
                         <img src="{% static 'icon/trophy purple.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px;">
-                        1
+                        {{ book.rank }}
                     </div>
                     <div class="total-upvote d-flex flex-row justify-content-center align-items-center" style="background-color: white;">
                         <img src="{% static 'icon/upvote grey.png' %}" alt="user" style="width: 24px; height: 24px; margin-right: 12px; background-color: white;">
-                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;">177 Votes</p>
+                        <p style="margin-bottom: 0px; background-color: white; color: var(--kashmir-blue-500); font-weight: 700; font-size: 14px;">{{ book.total_votes }}</p>
                     </div>
                 </div>
                 <div class="about d-flex flex-column" style="background-color: white;">
@@ -123,11 +123,23 @@
                 </div>
 
                 <div class="action" style="background-color: white;">
-                    <button style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
+                    <button id="lihatDetailBtn" style="background-color: var(--jaguar-600); border-radius: 20px; padding: 16px; border-style: none; color: white; font-size: 14px; font-weight: 700;">
                         Lihat Detail
                     </button>
                 </div>
-                
+                <!-- Modal -->
+                <div id="loginModal" class="modal">
+                  <div class="modal-content">
+                      <span class="close">&times;</span>
+                      <h5>Silahkan login terlebih dahulu.</h5>
+                      
+                      <button style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700;">
+                        <a href="{% url 'authentication:login_user' %}" style="background-color: var(--jaguar-600); border-style: none; text-decoration: none; color: white;">Masuk</a>
+                      </button>
+
+                  </div>
+                </div>
+
             </div>
           
         </div>
@@ -188,6 +200,49 @@
     animation-iteration-count: 1;
     transform-origin: 50% 50%;
   }
+}
+
+/* Style modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+    text-align: center;
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 </style>
@@ -259,5 +314,29 @@
   }
 
   truncateText(); // Call the function to truncate the text
+
+  // Get the modal and the button that opens it
+  var modal = document.getElementById("loginModal");
+  var btn = document.getElementById("lihatDetailBtn");
+
+  // Get the close button (x)
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks the close button (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
 </script>
 {% endblock %}

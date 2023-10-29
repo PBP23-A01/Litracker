@@ -6,30 +6,30 @@
 
 {% block content %}
 
-<div class = "login">
+
 
     {% load static %}
-    <img src="{% static 'icon/fire grey.png' %}" alt="My image">
+    <!-- <img src="{% static 'icon/fire grey.png' %}" alt="My image"> -->
 
-    <h1>Login</h1>
+<div class = "container-fluid g-0 h-100 d-flex row justify-content-center align-items-center w-100">
+    <h1 class="container-fluid g-0 h-100 d-flex row justify-content-center align-items-center" style="padding-top: 100px; padding-bottom: 40px; font-weight: 700; color: var(--jaguar-950);">Login</h1>
 
-    <form method="POST" action="">
+    <form method="POST" action="" class="container-fluid g-0 d-flex justify-content-center align-items-center" >
         {% csrf_token %}
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+        <table class="justify-content-center align-items-center g-0 d-flex">
+            <tr class="d-flex row" style="margin-bottom: 20px;">
+                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Username </td>
+                <td class="w-100"><input type="text" name="username" placeholder="Username" class="form-control"></td>
             </tr>
                     
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            <tr class="d-flex row">
+                <td style="color: var(--kashmir-blue-400); font-size: 14px; font-weight: 600;">Password </td>
+                <td ><input type="password" name="password" placeholder="Password" class="form-control" style="background-color: white;"></td>
             </tr>
 
-            <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
+            
+                <td class="w-100 d-flex container-fluid g-0 "><input class="btn container-fluid login_btn d-flex justify-content-center w-100 align-items-center" style="background-color: var(--jaguar-600); padding-block: 8px; border-radius: 16px; color: white;justify-content: center; align-items: center; margin-block: 40px; font-weight: 500; width: 100px;" type="submit" value="Login"></td>
+            
         </table>
     </form>
 
