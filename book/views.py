@@ -47,14 +47,29 @@ def is_admin(user):
     return user.userprofile.is_admin
 
 def tambah_buku(request):
-    if request.method == 'POST':
-        form = BookForm(request.POST)
+    try:
+        # Ambil data dari permintaan POST
+        data = json.loads(request.body.decode('utf-8'))
+
+        # Buat instance BookForm dengan data dari permintaan
+        form = BookForm(data)
+
+        # Periksa validitas formulir
         if form.is_valid():
+            # Simpan buku ke database
             form.save()
-            return redirect('homepage')
-    else:
-        form = BookForm()
-    return render(request, 'tambah_buku.html', {'form': form})
+
+            # Berikan respons JSON yang sesuai
+            response_data = {'message': 'Book added successfully'}
+            return JsonResponse(response_data, status=201)
+
+        else:
+            # Jika formulir tidak valid, kirim pesan kesalahan JSON
+            errors = form.errors.as_json()
+            return JsonResponse({'error': errors}, status=400)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 @csrf_exempt
 def search_books(request):
