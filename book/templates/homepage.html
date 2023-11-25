@@ -51,8 +51,6 @@
             {% if user.is_authenticated %}
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Reading History</a></li>
               
-              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Add Book</a></li>
-              
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
             {% endif %}
           </ul>
@@ -113,7 +111,7 @@
     <span id="text"></span>
     <span id="cursor" style="color: white;">|</span>
   </div>
-
+  
   <div class="h-100 container-fluid w-100" style="height: 100px; background-color: white; margin-top: 80px; border-radius: 60px 60px 0px 0px; padding: 60px;">
     <p style="font-size: 20px; background-color: white;">Featured Books</p>
 
@@ -341,7 +339,58 @@
       {% endfor %}
     </div>
   </div>
-  
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-round mr-md-3 mb-md-0 mb-2" data-toggle="modal" data-target="#bookModal">
+    Add Book
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookModalLabel">Add Book</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="bookForm">
+            <!-- Form fields -->
+            <div class="form-group">
+              <label for="isbn" style="font-size: large;">ISBN</label>
+              <input type="text" class="form-control" id="isbn" name="isbn" placeholder="ISBN">
+            </div>
+            <div class="form-group">
+              <label for="title" style="font-size: large;">Title</label>
+              <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+            </div>
+            <div class="form-group">
+              <label for="author" style="font-size: large;">Author</label>
+              <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+            </div>
+            <div class="form-group">
+              <label for="published_year" style="font-size: large;">Published Year</label>
+              <input type="text" class="form-control" id="published_year" name="published_year" placeholder="Published Year">
+            </div>
+            <div class="form-group">
+              <label for="publisher" style="font-size: large;">Publisher</label>
+              <input type="text" class="form-control" id="publisher" name="publisher" placeholder="Publisher">
+            </div>
+            <div class="form-group">
+              <label for="image_url_l" style="font-size: large;">Image URL</label>
+              <input type="text" class="form-control" id="image_url_l" name="image_url_l" placeholder="Image URL">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="submitBook">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
   
 </div>
 
@@ -505,6 +554,56 @@
       }
       return cookieValue;
   }
+
+  function submitBook() {
+  $(document).ready(function() {
+    $('#submitBook').click(function(e) {
+      e.preventDefault();
+
+      // Get form data
+      var isbn = $('#isbn').val();
+      var title = $('#title').val();
+      var author = $('#author').val();
+      var published_year = $('#published_year').val();
+      var publisher = $('#publisher').val();
+      var image_url_l = $('#image_url_l').val();
+
+      // Create book object
+      var book = {
+        isbn: isbn,
+        title: title,
+        author: author,
+        published_year: published_year,
+        publisher: publisher,
+        image_url_l: image_url_l
+      };
+
+      // Send data to server
+      $.ajax({
+        url: `{% url 'book:tambah_buku' %}`,
+        type: 'POST',
+        data: JSON.stringify(book),
+        dataType: 'json',
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        },
+        contentType: 'application/json',
+        success: function(response) {
+          console.log('Success:', response);
+          $('#bookModal').modal('hide');
+          location.reload(); // Refresh the page
+        },
+        error: function(error) {
+          console.log('Error:', error);
+        }
+      });
+    });
+  });
+}
+
+$(document).ready(function() {
+  submitBook();
+});
 </script>
 
 <style>
@@ -593,6 +692,10 @@
     100% {
         opacity: 1;
     }
+}
+
+.modal {
+  background-color: transparent;
 }
 </style>
 <script>

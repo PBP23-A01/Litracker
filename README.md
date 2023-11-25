@@ -179,3 +179,18 @@ Akun admin difokuskan ke dalam manajemen akun sehingga akses dashboard terhadap 
 </details>
 
 ![IA Admin](/Information%20Architecture%20Admin.png) 
+
+## Fix untuk menjalankan web di local
+Jika menemukan error semacam ini saat menjalankan `python manage.py migrate`
+
+![Error](https://cdn.discordapp.com/attachments/1152952874037428306/1177801500861399163/image.png?ex=6573d420&is=65615f20&hm=0505e0a384e1bba8b900ff6e5a3195d615cee088b9642eae7e317f1283462840&)
+
+Pada direktori `book` hilangkan models ini terlebih dahulu, tapi jangan lupa untuk copy 3 fields dibawah ini:
+
+![Models book](https://cdn.discordapp.com/attachments/1152952874037428306/1177800526528790628/image.png?ex=6573d338&is=65615e38&hm=ba0e8e2739629017549df33bd3d9051bd96bf50fa05ad9426669e061a3518484&)
+
+Setelah jalankan `python manage.py makemigrations` lalu `python manage.py migrate` dan tambahkan lagi fields yang dihapus tadi ke dalam `models.py` pada `book` sehingga menjadi seperti ini lagi
+
+![models](https://cdn.discordapp.com/attachments/1152952874037428306/1177801960871710791/image.png?ex=6573d48d&is=65615f8d&hm=395dbbc4abee26bb922ee9a0540d0338373c538bf215df03ff7568c0112461c4&)
+
+Jalankan lagi `python manage.py makemigrations` lalu `python manage.py migrate`. Baru lah jalankan `python manage.py runserver`.

@@ -1,5 +1,5 @@
 from django.urls import path
-from book.views import get_books, show_homepage, upvote_book, search_books, wishlist_book, simpan_last_page, last_page
+from book.views import get_books, show_homepage, upvote_book, search_books, wishlist_book, simpan_last_page, last_page, tambah_buku
 
 app_name = 'book'
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path('upvote_book/<int:book_id>/', upvote_book, name='upvote_book'),
     path('last_page',last_page, name="last_page"),
     path('simpan_last_page/<int:book_id>/', simpan_last_page, name='simpan_last_page'),
-    path('wishlist_book/<int:book_id>/', wishlist_book, name='wishlist_book')
+    path('wishlist_book/<int:book_id>/', wishlist_book, name='wishlist_book'),
+    path('tambah_buku/', tambah_buku, name='tambah_buku')
 ]
