@@ -1,11 +1,13 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from book.models import Book
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from reading_history.models import ReadingHistory
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 # @login_required
@@ -18,19 +20,33 @@ from django.contrib.auth.models import User
 @login_required
 def history_book(request):
     # Get the user's profile
+    print(request.user)
     try:
         if request.method == 'POST':
+            received_data = json.loads(request.body)
             user = request.user
-            history_book = Book.objects.get(pk=id)
-            new_history = ReadingHistory(user = user, history_book = history_book)
-            print("hi")
+            history_book = Book.objects.get(pk=received_data["bookId"])
+            new_history = ReadingHistory(user = user, book = history_book, last_page = received_data["lastPage"])
             new_history.save()
-            print("hello")
 
             return HttpResponse(b"CREATED", status=201)
     except Exception as err:
         print(err)
     return HttpResponseNotFound
+
+@csrf_exempt
+def fetch_history(request):
+    readingHistory = ReadingHistory.objects.all()
+    list_desc = []
+    list_history_book = []
+
+    for j in readingHistory:
+        last_page = j.last_page
+        var = { 'user_id': j.user.pk, 'book_id': j.book.pk, 'last_page': j.last_page, 'date_opened':j.date_opened.strftime('%Y-%m-%d %H:%M:%S') }
+        list_history_book.append(var)
+    return JsonResponse({'history': list_history_book})
+
+
 
 @login_required(login_url='/login')
 def show_history(request):
@@ -39,7 +55,7 @@ def show_history(request):
     list_history_book = []
 
     for j in readingHistory:
-        history_book = j.history_book
+        last_page = j.last_page
         list_history_book.append(history_book)
     
     list_set_history_book = set(list_history_book)
@@ -63,7 +79,7 @@ def show_history(request):
 
     context = {
         'books':books_info,
-        'history_book':history_book
+        'last_page':last_page
     }
     
     return render(request,'history_book.html',context)

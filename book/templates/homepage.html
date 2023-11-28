@@ -507,16 +507,17 @@
 </script>
 
 <script>
-  document.getElementById('button_add').addEventListener('click', function () {
+  document.getElementById('button_add').addEventListener('click', async function () {
       var bookId = this.getAttribute('data-book-id');
       var lastPage = document.getElementById('last_page').value;
 
       const requestData = {
-          last_page: lastPage
+          bookId: parseInt(bookId),
+          lastPage: parseInt(lastPage)
       };
 
       // Send an AJAX request to the view to save the last page
-      fetch("{% url 'book:history_book' 0 %}".replace("0", bookId), {
+      await fetch("{% url 'book:history_book'%}", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -525,17 +526,17 @@
           body: JSON.stringify(requestData),
       })
       .then(response => response.json())
-      .then(data => {
-        const lastPage = data.last_page;
-        console.log("Last Page:", lastPage);
-          if (data.message) {
-              // Success message
-              alert(data.message);
-          } else {
-              // Handle errors here
-              alert('Error: ' + data.error);
-          }
-      });
+      // .then(data => {
+      //   const lastPage = data.last_page;
+      //   console.log("Last Page:", lastPage);
+      //     if (data.message) {
+      //         // Success message
+      //         alert(data.message);
+      //     } else {
+      //         // Handle errors here
+      //         alert('Error: ' + data.error);
+      //     }
+      // });
   });
 
   // Function to get the CSRF token from cookies
