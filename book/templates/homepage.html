@@ -49,7 +49,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="background-color: white; border-radius: 20px; border-color: var(--kashmir-blue-100);">
             {% if user.is_authenticated %}
-              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="#" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Reading History</a></li>
+              <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'reading_history:history_book' %}" style="background-color: white; border-radius: 20px; font-weight: 400; color: var(--kashmir-blue-500)">Reading History</a></li>
               
               <li style="background-color: white; border-radius: 20px;"><a class="dropdown-item" href="{% url 'authentication:logout_user' %}" style="background-color: white; border-radius: 20px; color: var(--kashmir-blue-500)">Logout</a></li>
             {% endif %}
@@ -156,23 +156,23 @@
                           <div class="modal-header" style="border-radius: 20px; background-color: white; border-style: none;">
                             <h1 style="background-color: white; font-size: 20px; margin: 8px;">Add Reading History</h1>
                           </div>
+                        <form method="POST" action="{% url 'history_book' 'book_id=book_id'}" id="form" style="background-color: white;" onsubmit="return false;">
                           <div class="modal-body" style="background-color: white;">
-                            <form id="form" style="background-color: white;" onsubmit="return false;">
-                              {% csrf_token %}
+                            {% csrf_token %}
                               <div class="mb-3" style="background-color: white;">
                                   <label for="last_page" class="col-form-label" style="font-size: 16px; background-color: white; font-weight: 700; margin: 8px; ">Last Page:</label>
-                                  <input type="number" class="form-control" id="last_page" name="last_page"></input>
+                                  <input type="number" class="form-control" id="last_page" required name="last_page"></input>
                               </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
-                            <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
-                                <a href="{% url 'book:simpan_last_page' book.pk %}" name="last_page" style="text-decoration: none; border-style: none; color: white; background-color: var(--jaguar-600);">
+                          
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: white; border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 16px; font-weight: 700; border-color: var(--kashmir-blue-200); border-width: 2px; border-style: solid; color: var(--jaguar-950);">Close</button>
+                              <button type="submit" class="btn btn-primary" id="button_add" data-bs-dismiss="modal" style="background-color: var(--jaguar-600); border-radius: 20px; padding-block: 16px; padding-inline: 24px; border-style: none; font-size: 14px; font-weight: 700; color: white; margin-right: 20px;">
                                   Add Reading History
-                                </a>
-                            </button>
-                        </div>                        
+                                  
+                              </button>
+                          </div>   
+                        </form>                     
                         </div>
                     </div>
                 </div>
@@ -516,7 +516,7 @@
       };
 
       // Send an AJAX request to the view to save the last page
-      fetch(`/book/save_last_page/${bookId}/`, {
+      fetch("{% url 'book:history_book' 0 %}".replace("0", bookId), {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
