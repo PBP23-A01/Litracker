@@ -42,7 +42,7 @@ def fetch_history(request):
 
     for j in readingHistory:
         last_page = j.last_page
-        var = { 'user_id': j.user.pk, 'book_id': j.book.pk, 'last_page': j.last_page, 'date_opened':j.date_opened.strftime('%Y-%m-%d %H:%M:%S') }
+        var = { 'user_id': j.user.pk, 'book_id': j.pk, 'last_page': j.last_page, 'date_opened':j.date_opened.strftime('%Y-%m-%d %H:%M:%S') }
         list_history_book.append(var)
     return JsonResponse({'history': list_history_book})
 
