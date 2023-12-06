@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.db import transaction
 from django.db.models import Q
-from book.models import Book
+from book.models import Book, BookVotes, BookWishlist
 from authentication.models import UserProfile
 from book.forms import BookForm
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -20,20 +20,59 @@ def get_books(request):
     return HttpResponse(serializers.serialize("json", data), 
                         content_type="application/json")
 
+
+@login_required
+def upvote_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    book_vote, created = BookVotes.objects.get_or_create(book=book)
+
+    if book in user_profile.upvoted_books.all():
+        user_profile.upvoted_books.remove(book)
+        book_vote.total_votes -= 1
+    else:
+        user_profile.upvoted_books.add(book)
+        book_vote.total_votes += 1
+
+    with transaction.atomic():
+        user_profile.save()
+        book_vote.save()
+
+    return redirect('authentication:index')
+
+@login_required
+def wishlist_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    book_wishlist, created = BookWishlist.objects.get_or_create(book=book)
+
+    if book in user_profile.wishlist_books.all():
+        user_profile.wishlist_books.remove(book)
+        book_wishlist.total_wishlist -= 1
+    else:
+        user_profile.wishlist_books.add(book)
+        book_wishlist.total_wishlist += 1
+
+    with transaction.atomic():
+        user_profile.save()
+        book_wishlist.save()
+
+    return redirect('authentication:index')
+
 def show_homepage(request):
     user = request.user
-    books = Book.objects.all().order_by('-total_votes')
+    books = Book.objects.all()
 
     rank = 0
     prev_votes = None
     
     for book in books:
-        if book.total_votes != prev_votes:
+        book_vote = BookVote.objects.get_or_create(book=book)
+        if book_vote.total_votes != prev_votes:
             rank += 1
         book.rank = rank
-        prev_votes = book.total_votes
+        prev_votes = book_vote.total_votes
 
-    
     context = {'books': books}
     if request.user.is_authenticated:
         try:
@@ -41,6 +80,27 @@ def show_homepage(request):
         except KeyError:
             context['last_login'] = 'None'
     return render(request, 'homepage.html', context)
+# def show_homepage(request):
+#     user = request.user
+#     books = BookVotes.objects.all().order_by('-votes__total_votes')
+
+#     rank = 0
+#     prev_votes = None
+    
+#     for book in books:
+#         if book.votes.total_votes != prev_votes:
+#             rank += 1
+#         book.rank = rank
+#         prev_votes = book.votes.total_votes
+
+    
+#     context = {'books': books}
+#     if request.user.is_authenticated:
+#         try:
+#             context['last_login'] = request.COOKIES['last_login']
+#         except KeyError:
+#             context['last_login'] = 'None'
+#     return render(request, 'homepage.html', context)
 
 
 def is_admin(user):
@@ -96,45 +156,47 @@ def search_books(request):
 #     book.save()
 #     return redirect('authentication:index')
 
-@login_required
-def upvote_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    user_profile = UserProfile.objects.get(user=request.user)
+# @login_required
+# def upvote_book(request, book_id):
+#     book = get_object_or_404(Book, pk=book_id)
+#     user_profile = UserProfile.objects.get(user=request.user)
+#     book_votes, created = BookVotes.objects.get_or_create(book=book)
 
-    if book in user_profile.upvoted_books.all():
-        # User has already upvoted the book, so remove the upvote
-        user_profile.upvoted_books.remove(book)
-        book.total_votes -= 1
-    else:
-        # User has not upvoted the book, so add the upvote
-        user_profile.upvoted_books.add(book)
-        book.total_votes += 1
+#     if book in user_profile.upvoted_books.all():
+#         # User has already upvoted the book, so remove the upvote
+#         user_profile.upvoted_books.remove(book)
+#         book_votes.total_votes -= 1
+#     else:
+#         # User has not upvoted the book, so add the upvote
+#         user_profile.upvoted_books.add(book)
+#         book_votes.total_votes += 1
 
-    # Save the changes to both the book and user profile within a transaction
-    with transaction.atomic():
-        user_profile.save()
-        book.save()
+#     # Save the changes to both the book and user profile within a transaction
+#     with transaction.atomic():
+#         user_profile.save()
+#         book.save()
 
-    # Return a JSON response indicating success or failure
-    return redirect('authentication:index')
+#     # Return a JSON response indicating success or failure
+#     return redirect('authentication:index')
 
-@login_required
-def wishlist_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    user_profile = UserProfile.objects.get(user=request.user)
+# @login_required
+# def wishlist_book(request, book_id):
+#     book = get_object_or_404(Book, pk=book_id)
+#     user_profile = UserProfile.objects.get(user=request.user)
+#     book_wishlist, created = BookWishlist.objects.get_or_create(book=book)
 
-    if book in user_profile.wishlist_books.all():
-        user_profile.wishlist_books.remove(book)
-        book.total_wishlist -= 1
-    else:
-        user_profile.wishlist_books.add(book)
-        book.total_wishlist += 1
+#     if book in user_profile.wishlist_books.all():
+#         user_profile.wishlist_books.remove(book)
+#         book_wishlist.total_wishlist -= 1
+#     else:
+#         user_profile.wishlist_books.add(book)
+#         book_wishlist.total_wishlist += 1
 
-    with transaction.atomic():
-        user_profile.save()
-        book.save()
+#     with transaction.atomic():
+#         user_profile.save()
+#         book.save()
 
-    return redirect('authentication:index')
+#     return redirect('authentication:index')
 
 @login_required
 def history_book(request, book_id):
