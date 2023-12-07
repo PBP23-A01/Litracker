@@ -46,8 +46,6 @@ def fetch_history(request):
         list_history_book.append(var)
     return JsonResponse({'history': list_history_book})
 
-
-
 @login_required(login_url='/login')
 def show_history(request):
     readingHistory = ReadingHistory.objects.filter(user=request.user)
