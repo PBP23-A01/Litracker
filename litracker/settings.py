@@ -151,3 +151,5 @@ SESSION_COOKIE_SAMESITE = 'None'
  
 LOGIN_URL = 'authentication:index' 
 # kalau belum login tapi akses home akan redirect ke guest page
+
+CSRF_TRUSTED_ORIGINS = ["https://litracker-a01-tk.pbp.cs.ui.ac.id/"]
