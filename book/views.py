@@ -67,7 +67,7 @@ def show_homepage(request):
     prev_votes = None
     
     for book in books:
-        book_vote = BookVote.objects.get_or_create(book=book)
+        book_vote, created = BookVotes.objects.get_or_create(book=book)
         if book_vote.total_votes != prev_votes:
             rank += 1
         book.rank = rank
