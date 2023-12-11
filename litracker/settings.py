@@ -47,9 +47,11 @@ INSTALLED_APPS = [
     'review_book',
     'authentication',
     'favorite_book',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -140,7 +142,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
  
 LOGIN_URL = 'authentication:index' 
 # kalau belum login tapi akses home akan redirect ke guest page
+
+CSRF_TRUSTED_ORIGINS = ["https://litracker-a01-tk.pbp.cs.ui.ac.id/"]

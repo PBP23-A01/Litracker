@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -8,8 +8,11 @@ from django.contrib.auth import authenticate, login, logout
 from book.models import Book
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
+from django.db.models import F
 from authentication.models import UserProfile
 from authentication.forms import AdminRegistrationForm
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -74,17 +77,19 @@ def index(request):
     if request.user.is_authenticated:
         return redirect('book:show_homepage')  # Redirect to the book:index view
     else:
-        books = Book.objects.all().order_by('-total_votes')
+        books = Book.objects.annotate(
+            total_votes=F('votes__total_votes')
+        ).order_by('-total_votes')
 
         rank = 0
         prev_votes = None
-        
+
         for book in books:
             if book.total_votes != prev_votes:
                 rank += 1
             book.rank = rank
             prev_votes = book.total_votes
-        
+
         context = {'books': books}
         return render(request,'index.html', context)
 
@@ -92,3 +97,61 @@ def get_books(request):
     data = Book.objects.all()
     return HttpResponse(serializers.serialize("json", data), 
                         content_type="application/json")
+
+@csrf_exempt
+def mobile_login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!",
+                "id": user.id,  # Untuk filtering item di Flutter app nya
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+    
+@csrf_exempt
+def logout_mobile(request):
+    username = request.user.username
+
+    try:
+        logout(request)
+        return JsonResponse({
+            "username": username,
+            "status": True,
+            "message": "Logout berhasil!"
+        }, status=200)
+    except:
+        return JsonResponse({
+        "status": False,
+        "message": "Logout gagal."
+        }, status=401)
+
+    
+@csrf_exempt
+def register_mobile(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({"status": False, "message": "Username already used."}, status=400)
+
+    user = User.objects.create_user(username=username, password=password)
+    user.save()
+
+    return JsonResponse({"username": user.username, "status": True, "message": "Register successful!"}, status=201)
