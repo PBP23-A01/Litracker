@@ -17,6 +17,41 @@ from django.views.decorators.csrf import csrf_exempt
 #     user_profile.history_books.add(book)
 #     return redirect('book_detail', book_id=book_id)
 
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from .models import Book, ReadingHistory
+import json
+
+@login_required
+@csrf_exempt
+def edit_page_number(request, history_id):
+    try:
+        if request.method == 'POST':
+            received_data = json.loads(request.body)
+            new_page_number = received_data.get("newPageNumber")
+            history_entry = get_object_or_404(ReadingHistory, pk=history_id, user=request.user)
+            history_entry.last_page = new_page_number
+            history_entry.save()
+
+            return HttpResponse("Page number updated successfully", status=200)
+    except Exception as err:
+        print(err)
+        return HttpResponse(status=500)
+
+@login_required
+@csrf_exempt
+def delete_history_entry(request, history_id):
+    try:
+        history_entry = get_object_or_404(ReadingHistory, pk=history_id, user=request.user)
+        history_entry.delete()
+
+        return HttpResponse("History entry deleted successfully", status=200)
+    except Exception as err:
+        print(err)
+        return HttpResponse(status=500)
+    
 @login_required
 def history_book(request):
     # Get the user's profile
