@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core import serializers
+from sympy import Sum
 from book.models import Book
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -34,3 +35,15 @@ def upvote_book(request):
 
     # You can now pass 'upvoted_books' to your template to display the list
     return render(request, 'upvote_book.html', context)
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from book.models import BookVotes, BookWishlist
+
+@require_GET
+@login_required
+def get_total_votes(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    total_votes = user_profile.upvoted_books.aggregate(Sum('votes__total_votes'))['votes__total_votes__sum']
+    return JsonResponse({'total_votes': total_votes})
