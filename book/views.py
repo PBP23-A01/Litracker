@@ -59,6 +59,51 @@ def wishlist_book(request, book_id):
 
     return redirect('authentication:index')
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import JsonResponse
+
+@login_required
+def upvote_book_mobile(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    book_vote, created = BookVotes.objects.get_or_create(book=book)
+
+    if book in user_profile.upvoted_books.all():
+        user_profile.upvoted_books.remove(book)
+        book_vote.total_votes -= 1
+    else:
+        user_profile.upvoted_books.add(book)
+        book_vote.total_votes += 1
+
+    with transaction.atomic():
+        user_profile.save()
+        book_vote.save()
+
+    total_votes = book.upvoters.count()
+    return JsonResponse({'total_votes': total_votes})
+
+@login_required
+def wishlist_book_mobile(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    book_wishlist, created = BookWishlist.objects.get_or_create(book=book)
+
+    if book in user_profile.wishlist_books.all():
+        user_profile.wishlist_books.remove(book)
+        book_wishlist.total_wishlist -= 1
+    else:
+        user_profile.wishlist_books.add(book)
+        book_wishlist.total_wishlist += 1
+
+    with transaction.atomic():
+        user_profile.save()
+        book_wishlist.save()
+
+    total_wishlist = book.wishlists.count()
+    return JsonResponse({'total_wishlist': total_wishlist})
+
 def show_homepage(request):
     user = request.user
     books = Book.objects.all()
