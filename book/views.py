@@ -125,31 +125,31 @@ def show_homepage(request):
         except KeyError:
             context['last_login'] = 'None'
     return render(request, 'homepage.html', context)
-# def show_homepage(request):
-#     user = request.user
-#     books = BookVotes.objects.all().order_by('-votes__total_votes')
-
-#     rank = 0
-#     prev_votes = None
-    
-#     for book in books:
-#         if book.votes.total_votes != prev_votes:
-#             rank += 1
-#         book.rank = rank
-#         prev_votes = book.votes.total_votes
-
-    
-#     context = {'books': books}
-#     if request.user.is_authenticated:
-#         try:
-#             context['last_login'] = request.COOKIES['last_login']
-#         except KeyError:
-#             context['last_login'] = 'None'
-#     return render(request, 'homepage.html', context)
-
 
 def is_admin(user):
     return user.userprofile.is_admin
+
+@csrf_exempt
+def add_book_mobile(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        new_book = Book.objects.create(
+            isbn = data["isbn"],
+            title = data["title"],
+            author = data["author"],
+            published_year = int(data["published_year"]),
+            publisher = data["publisher"],
+            image_url_s = data["image_url_s"],
+            image_url_m = data["image_url_m"],
+            image_url_l = data["image_url_l"],
+        )
+
+        new_book.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
 
 def tambah_buku(request):
     try:
@@ -192,56 +192,6 @@ def search_books(request):
         # Jika query kosong kembali ke homepage
         return redirect('book:show_homepage')
     return render(request, 'homepage.html', {'search_term': search_term, 'results': results})
-    
-# @login_required
-# def upvote_book(request, book_id):
-#     book = get_object_or_404(Book, pk=book_id)
-
-#     book.total_votes += 1
-#     book.save()
-#     return redirect('authentication:index')
-
-# @login_required
-# def upvote_book(request, book_id):
-#     book = get_object_or_404(Book, pk=book_id)
-#     user_profile = UserProfile.objects.get(user=request.user)
-#     book_votes, created = BookVotes.objects.get_or_create(book=book)
-
-#     if book in user_profile.upvoted_books.all():
-#         # User has already upvoted the book, so remove the upvote
-#         user_profile.upvoted_books.remove(book)
-#         book_votes.total_votes -= 1
-#     else:
-#         # User has not upvoted the book, so add the upvote
-#         user_profile.upvoted_books.add(book)
-#         book_votes.total_votes += 1
-
-#     # Save the changes to both the book and user profile within a transaction
-#     with transaction.atomic():
-#         user_profile.save()
-#         book.save()
-
-#     # Return a JSON response indicating success or failure
-#     return redirect('authentication:index')
-
-# @login_required
-# def wishlist_book(request, book_id):
-#     book = get_object_or_404(Book, pk=book_id)
-#     user_profile = UserProfile.objects.get(user=request.user)
-#     book_wishlist, created = BookWishlist.objects.get_or_create(book=book)
-
-#     if book in user_profile.wishlist_books.all():
-#         user_profile.wishlist_books.remove(book)
-#         book_wishlist.total_wishlist -= 1
-#     else:
-#         user_profile.wishlist_books.add(book)
-#         book_wishlist.total_wishlist += 1
-
-#     with transaction.atomic():
-#         user_profile.save()
-#         book.save()
-
-#     return redirect('authentication:index')
 
 @login_required
 def history_book(request, book_id):
