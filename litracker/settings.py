@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4o+o05i3tw*xbri(0gopqpf6n@d*rc!8sac#-ee&w!0$9y_tck
 PRODUCTION = env.bool('PRODUCTION', False)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -149,7 +149,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
  
-CSRF_TRUSTED_ORIGINS = ["https://litracker-a01-tk.pbp.cs.ui.ac.id"]
+CSRF_TRUSTED_ORIGINS = ["https://litracker-a01-tk.pbp.cs.ui.ac.id", "http://localhost:61576"]
 
 # kalau belum login tapi akses home akan redirect ke guest page
 LOGIN_URL = 'authentication:index' 

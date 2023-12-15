@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import render
@@ -125,6 +126,33 @@ def mobile_login(request):
             "message": "Login gagal, periksa kembali email atau kata sandi."
         }, status=401)
     
+@csrf_exempt
+def admin_login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active and user.is_superuser:
+            login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!",
+                "id": user.id,
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun bukan admin atau dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+
 @csrf_exempt
 def logout_mobile(request):
     username = request.user.username
