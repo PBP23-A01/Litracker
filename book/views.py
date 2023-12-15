@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.db import transaction
@@ -7,12 +7,8 @@ from django.db.models import Q
 from book.models import Book, BookVotes, BookWishlist
 from authentication.models import UserProfile
 from book.forms import BookForm
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
-from reading_history.models import ReadingHistory
-from .forms import ReadingHistoryForm
 
 # Create your views here.
 def get_books(request):
@@ -58,11 +54,6 @@ def wishlist_book(request, book_id):
         book_wishlist.save()
 
     return redirect('authentication:index')
-
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.db import transaction
-from django.http import JsonResponse
 
 @login_required
 def upvote_book_mobile(request, book_id):
@@ -129,6 +120,7 @@ def show_homepage(request):
 def is_admin(user):
     return user.userprofile.is_admin
 
+# Tambah buku untuk flutter
 @csrf_exempt
 def add_book_mobile(request):
     if request.method == 'POST':
@@ -151,6 +143,7 @@ def add_book_mobile(request):
     else:
         return JsonResponse({"status": "error"}, status=401)
 
+# Tambah buku untuk web app
 def tambah_buku(request):
     try:
         # Ambil data dari permintaan POST
