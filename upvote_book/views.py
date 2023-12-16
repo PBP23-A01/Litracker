@@ -1,9 +1,9 @@
 import json
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404, HttpResponse, JsonResponse
 from django.core import serializers
 from sympy import Sum
-from upvote_book.models import Upvote
+from upvote_book.models import Upvote, Vote
 from book.models import Book
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -43,9 +43,28 @@ def upvote_book(request):
 
 
 
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
+@csrf_exempt
+def toggle_upvote_flutter(request, book_id):
+    book_instance = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
 
+    if request.method == 'POST':
+        # Check if the user has already voted for the book
+        vote, created = Vote.objects.get_or_create(user=user_profile, book=book_instance)
 
+        if created:
+            message = 'Upvoted'
+        else:
+            # If the user has already voted, delete the vote (unvote)
+            vote.delete()
+            message = 'Unvoted'
 
+        total_votes = Vote.objects.filter(book=book_instance).count()
 
-
+        return JsonResponse({'message': message, 'total_votes': total_votes})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
