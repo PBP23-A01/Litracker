@@ -1,8 +1,7 @@
 import json
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login, logout
