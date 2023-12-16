@@ -57,6 +57,8 @@ def toggle_upvote_flutter(request, book_id):
         # Check if the user has already voted for the book
         vote, created = Vote.objects.get_or_create(user=user_profile, book=book_instance)
 
+        
+
         if created:
             message = 'Upvoted'
         else:
@@ -84,6 +86,10 @@ def get_upvoting_users(request, book_id):
         # Convert the QuerySet to a list of dictionaries
         user_list = [vote.user.user.username for vote in upvoting_users]
 
+        # Check if a specific user is in the user_list
+        user_profile = UserProfile.objects.get(user=request.user)
+        is_user_in_list_orUpvoteThisBook = user_profile.user.username in user_list
+        
         # Include book information in the JSON response
         book_info = {
             'model': 'book.book',
@@ -101,13 +107,12 @@ def get_upvoting_users(request, book_id):
             }
         }
 
-        return JsonResponse({'upvoting_users': user_list, 'total_users_upvote': upvoting_users.count(), 'book': book_info})
+        return JsonResponse({'upvoting_users': user_list, 'total_users_upvote': upvoting_users.count(), 'book': book_info, 'isUpvote': is_user_in_list_orUpvoteThisBook})
     else:
         return HttpResponseBadRequest('Invalid request method')
     
 
 # Buku apa saja yang user upvote berapa jumlah buku yang telah user upvote?
-
 @csrf_exempt
 def get_upvoted_books(request):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -115,7 +120,6 @@ def get_upvoted_books(request):
     if request.method == 'GET':
         upvoted_books = Vote.objects.filter(user=user_profile)
         books_list = []
-
         for vote in upvoted_books:
             book_instance = vote.book
             book_info = {
@@ -138,5 +142,6 @@ def get_upvoted_books(request):
         total_upvoted_books = len(upvoted_books)
 
         return JsonResponse({'total_upvoted_books': total_upvoted_books, 'upvoted_books': books_list, }, json_dumps_params={'indent': 2})
+        # return JsonResponse({'total_upvoted_books':total_upvoted_books},safe=False)
     else:
         return HttpResponseBadRequest('Invalid request method')
