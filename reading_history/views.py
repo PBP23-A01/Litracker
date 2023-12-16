@@ -24,21 +24,20 @@ from django.contrib.auth.decorators import login_required
 from .models import Book, ReadingHistory
 import json
 
-@login_required
 @csrf_exempt
-def edit_page_number(request, history_id):
-    try:
-        if request.method == 'POST':
-            received_data = json.loads(request.body)
-            new_page_number = received_data.get("newPageNumber")
-            history_entry = get_object_or_404(ReadingHistory, pk=history_id, user=request.user)
+def edit_page_number(request):
+    if request.method == 'POST':
+        received_data = json.loads(request.body)
+        book_id = received_data.get('bookId')
+        new_page_number = received_data.get('newPageNumber')
+
+        try:
+            history_entry = ReadingHistory.objects.get(book_id=book_id)
             history_entry.last_page = new_page_number
             history_entry.save()
-
-            return HttpResponse("Page number updated successfully", status=200)
-    except Exception as err:
-        print(err)
-        return HttpResponse(status=500)
+            return JsonResponse({'message': 'Page number edited successfully'}, status=201)
+        except ReadingHistory.DoesNotExist:
+            return JsonResponse({'message': 'Book not found in history'}, status=404)
 
 @login_required
 @csrf_exempt
