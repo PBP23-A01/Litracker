@@ -47,6 +47,59 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
+
+
+# Cek peringkat buku-buku dengan melihat total votes. Jika ada jumlah votes sama, maka buku dengan upvote terbaru memiliki peringkat lebih tinggi.
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Count, Max
+
+@csrf_exempt
+def get_top_books(request):
+    if request.method == 'GET':
+        # Retrieve all books with their total upvotes and latest upvote timestamp
+        books = Book.objects.annotate(
+            total_upvotes=Count('vote'),
+            latest_upvote=Max('vote__created_at')
+        ).order_by('-total_upvotes', '-latest_upvote')[:10]
+
+        # Create a list of dictionaries for the JSON response
+        top_books_list = []
+        for book in books:
+            top_books_list.append({
+                'book_id': book.id,
+                'title': book.title,
+                'author': book.author,  # Add the author information
+                'total_upvotes': book.total_upvotes,
+                'image_url_l': book.image_url_l,
+                'image_url_m': book.image_url_m,
+                'image_url_s': book.image_url_s,
+                'latest_upvote_time': format_time_difference(book.latest_upvote),
+            })
+
+        return JsonResponse({'top_books': top_books_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
+def format_time_difference(timestamp):
+    if timestamp is None:
+        return "Tidak ada data upvote terakhir"  # or any default value you prefer for cases where the timestamp is None
+
+    time_difference = timezone.now() - timestamp
+    if time_difference.days > 0:
+        return f"{time_difference.days} h yang lalu"
+    elif time_difference.seconds >= 3600:
+        hours, remainder = divmod(time_difference.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{int(hours)} j {int(minutes)} m {int(seconds)} d yang lalu"
+    elif time_difference.seconds >= 60:
+        minutes, seconds = divmod(time_difference.seconds, 60)
+        return f"{int(minutes)} m {int(seconds)} d yang lalu"
+    else:
+        return f"{int(time_difference.seconds)} d yang lalu"
+
+
+    
 # Hak upvote dan batal upvote user
 @csrf_exempt
 def toggle_upvote_flutter(request, book_id):
@@ -75,6 +128,7 @@ def toggle_upvote_flutter(request, book_id):
 
 
 # Siapa saja user yang upvote buku X dan berapa user yang upvote buku X?
+# Serta cek apakah user Y sudah upvote buku X
 @csrf_exempt
 def get_upvoting_users(request, book_id):
     book_instance = get_object_or_404(Book, pk=book_id)
