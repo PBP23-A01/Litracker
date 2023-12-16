@@ -106,6 +106,7 @@ def mobile_login(request):
     if user is not None:
         if user.is_active:
             login(request, user)
+            request.session['user_id'] = user.id
             UserProfile.objects.get_or_create(user=user)
             # Status login sukses.
             return JsonResponse({
