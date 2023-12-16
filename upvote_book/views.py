@@ -1,9 +1,9 @@
 import json
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404, HttpResponse, JsonResponse
 from django.core import serializers
 from sympy import Sum
-from upvote_book.models import MyUpvoteListFlutter, UpvotedbyUsersFlutter
+from upvote_book.models import Upvote, Vote
 from book.models import Book
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -43,80 +43,28 @@ def upvote_book(request):
 
 
 
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
-
-
-
-
-
-
-def data_upvote_flutter(request, book_id):
+@csrf_exempt
+def toggle_upvote_flutter(request, book_id):
+    book_instance = get_object_or_404(Book, pk=book_id)
     user_profile = UserProfile.objects.get(user=request.user)
-    book = Book.objects.get(pk=book_id)
 
-    data = json.loads(request.body)
-    if request.method == "POST":
+    if request.method == 'POST':
+        # Check if the user has already voted for the book
+        vote, created = Vote.objects.get_or_create(user=user_profile, book=book_instance)
 
-        # Membuat objek MyUpvoteList
-        i_upvote, created_upvote = MyUpvoteListFlutter.objects.get_or_create(
-            me=user_profile,
-            books=book,
-            reasoning=data["my_reason"]
-        )
+        if created:
+            message = 'Upvoted'
+        else:
+            # If the user has already voted, delete the vote (unvote)
+            vote.delete()
+            message = 'Unvoted'
 
-        # Memeriksa apakah user belum pernah upvote buku ini
-        if created_upvote:
-            i_upvote.save()
+        total_votes = Vote.objects.filter(book=book_instance).count()
 
-        # Membuat objek UpvotedbyUsers
-        book_upvoted_by_users, created_book_upvote = UpvotedbyUsersFlutter.objects.get_or_create(
-            book=book,
-            users=user_profile,
-        )
-
-        # Memeriksa apakah user belum ada di daftar upvoter suatu buku
-        if created_book_upvote:
-            book_upvoted_by_users.save()
-
-        return JsonResponse({"status": "success"}, status=200)
-    
+        return JsonResponse({'message': message, 'total_votes': total_votes})
     else:
-        return JsonResponse({"status": "error"}, status=401)
-    
-
-def display_upvote_users_flutter(request, book_id):
-    
-    data = json.loads(request.body)
-
-    # Mendapatkan objek buku
-    book = Book.objects.get(pk=book_id)
-
-    # Mendapatkan semua objek UpvotedbyUsers yang terkait dengan buku tersebut
-    upvoters = UpvotedbyUsersFlutter.objects.filter(book=book)
-
-    if request.method == "GET":
-    # Membuat daftar user dan komen masing-masing user yang upvote buku tersebut
-        upvote_data = []
-        for upvoter in upvoters:
-            users = upvoter.users.all()
-            comments = MyUpvoteListFlutter.objects.filter(me__in=users, books=book).values('me__user__username', 'reasoning')
-            upvote_data.append({"users": list(users.values_list('user__username', flat=True)), "comments": list(comments)})
-
-        return JsonResponse({"upvote_data": upvote_data}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
-
-
-def display_upvoted_books_flutter(request):
-    data = json.loads(request.body)
-
-    if request.method == "GET":
-        # Mendapatkan objek user_profile
-        user_profile = UserProfile.objects.get(user=request.user)
-
-        # Mendapatkan semua buku yang diupvote oleh user tersebut
-        upvoted_books = MyUpvoteListFlutter.objects.filter(me=user_profile).values('books__title', 'books__author')
-
-        return JsonResponse({"upvoted_books": list(upvoted_books)}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
+        return HttpResponseBadRequest('Invalid request method')

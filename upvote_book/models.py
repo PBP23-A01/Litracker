@@ -13,14 +13,9 @@ class Upvote(models.Model):
         unique_together = ('user', 'book')
 
 
-
-class MyUpvoteListFlutter(models.Model):
-    me = models.ForeignKey(UserProfile, on_delete=models.CASCADE) # 1 dari banyak orang
-    books = models.ManyToManyField(Book, related_name='upvoted_books') # Banyak buku
-    reasoning = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-
-class UpvotedbyUsersFlutter(models.Model):
+class Vote(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    users = models.ManyToManyField(UserProfile)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
