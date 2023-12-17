@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.core import serializers
 from sympy import Sum
-from book.models import Book
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 
 @login_required
 def favorite_book(request):
@@ -12,10 +11,6 @@ def favorite_book(request):
     favorite_book = user_profile.wishlist_books.all()
     context = {'favorite_book': favorite_book}
     return render(request, 'favorite_book.html', context)
-
-from django.http import JsonResponse
-from django.views.decorators.http import require_GET
-from book.models import BookVotes, BookWishlist
 
 @require_GET
 @login_required

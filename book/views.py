@@ -10,7 +10,7 @@ from book.forms import BookForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
+# View untuk ngambil data buku
 def get_books(request):
     data = Book.objects.all()
     return HttpResponse(serializers.serialize("json", data), 
@@ -143,6 +143,7 @@ def add_book_mobile(request):
     else:
         return JsonResponse({"status": "error"}, status=401)
     
+# Edit buku di flutter
 @csrf_exempt
 def edit_book_mobile(request, pk):
     if request.method == 'POST':
@@ -155,6 +156,7 @@ def edit_book_mobile(request, pk):
     else:
         return JsonResponse({"status": "error"}, status=401)
 
+# Hapus buku di flutter
 @csrf_exempt
 def delete_book_mobile(request, pk):
     if request.method == 'DELETE':
