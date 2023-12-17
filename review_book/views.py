@@ -7,6 +7,11 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from django.http import HttpResponseRedirect
 from review_book.forms import ReviewForm
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count, Max
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def show_review(request):
@@ -63,11 +68,6 @@ def format_time_difference(timestamp):
         return f"{int(minutes)} m {int(seconds)} d yang lalu"
     else:
         return f"{int(time_difference.seconds)} d yang lalu"
-    
-
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def commenting(request, book_id):
@@ -114,12 +114,6 @@ def commenting(request, book_id):
 
     return JsonResponse(response_data)
 
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.db.models import Count, Max
-from django.utils import timezone
-
 @csrf_exempt
 def get_book_reviews(request, book_id):
     if request.method == 'GET':
@@ -141,7 +135,39 @@ def get_book_reviews(request, book_id):
     else:
         return HttpResponseBadRequest('Invalid request method')
 
+@csrf_exempt
+def post_book_review(request, book_id):
+    if request.method == 'POST':
+        # Extract the data from the request
+        username = request.POST.get('username')
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating')
 
+        # Validate and sanitize the data
+        if not all([username, comment, rating]):
+            return HttpResponseBadRequest('Missing required fields')
+
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                return HttpResponseBadRequest('Invalid rating value')
+        except ValueError:
+            return HttpResponseBadRequest('Invalid rating value')
+
+        # Retrieve the book and user
+        try:
+            book = Book.objects.get(pk=book_id)
+            user = UserProfile.objects.get(user__username=username)
+        except ObjectDoesNotExist:
+            return HttpResponseBadRequest('Invalid book ID or username')
+
+        # Create the review
+        review = Review(book=book, user=user, comment=comment, rating=rating, timestamp=timezone.now())
+        review.save()
+
+        return JsonResponse({'message': 'Review created successfully'}, status=200)
+    else:
+        return HttpResponseBadRequest('Invalid request method')
 
 
 from django.shortcuts import get_object_or_404
