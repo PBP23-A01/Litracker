@@ -2,9 +2,10 @@ import json
 from django.shortcuts import render, redirect, get_object_or_404
 from book.models import Book
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from reading_history.models import ReadingHistory
 from authentication.models import UserProfile
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
@@ -81,6 +82,109 @@ def show_history(request):
     }
     
     return render(request,'history_book.html',context)
+
+# GET semua reading history dari semua buku, bisa untuk liat data JSON di web
+def get_all_reading_histories(request):
+    if request.method == 'GET':
+        # Retrieve all reading histories
+        reading_histories = ReadingHistory.objects.all()
+
+        # Create a list of dictionaries for the JSON response
+        reading_histories_list = []
+        for history in reading_histories:
+            reading_histories_list.append({
+                'id': history.id,
+                'book_id': history.book.pk,
+                'username': history.user.user.username,
+                'last_page': history.last_page,
+                'date_opened': history.date_opened.strftime('%Y-%m-%d'),
+            })
+
+        return JsonResponse({'reading_histories': reading_histories_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
+# GET reading history dari buku buat nanti di filternya di flutter
+@csrf_exempt
+def get_reading_history(request, book_id):
+    if request.method == 'GET':
+        # Retrieve the book and its reading history
+        book = Book.objects.get(pk=book_id)
+        reading_histories = ReadingHistory.objects.filter(book=book)
+
+        # Create a list of dictionaries for the JSON response
+        reading_histories_list = []
+        for history in reading_histories:
+            reading_histories_list.append({
+                'id': history.id,
+                'username': history.user.user.username,
+                'last_page': history.last_page,
+                'date_opened': history.date_opened.strftime('%Y-%m-%d'),
+            })
+
+        return JsonResponse({'book_id': book.id, 'reading_histories': reading_histories_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
+# View POST sekaligus untuk edit
+@csrf_exempt
+def post_reading_history(request, book_id):
+    if request.method == 'POST':
+        # Extract data from the request
+        username = request.POST.get('username')
+        last_page = request.POST.get('last_page')
+
+        # Validate the data
+        if not last_page:
+            return HttpResponseBadRequest('Missing required fields')
+
+        try:
+            last_page = int(last_page)
+            if last_page < 0:
+                return HttpResponseBadRequest('Invalid last page value')
+        except ValueError:
+            return HttpResponseBadRequest('Invalid last page value')
+
+        # Retrieve the book and user
+        try:
+            book = Book.objects.get(pk=book_id)
+            user = UserProfile.objects.get(user__username=username)
+        except ObjectDoesNotExist:
+            return HttpResponseBadRequest('Invalid book ID or username')
+
+        # Check if a reading history already exists for this book and user
+        try:
+            reading_history = ReadingHistory.objects.get(book=book, user=user)
+            # If it does, update the last_page field
+            reading_history.last_page = last_page
+            reading_history.save()
+            message = 'Reading history updated successfully'
+        except ReadingHistory.DoesNotExist:
+            # If it doesn't, create a new reading history
+            reading_history = ReadingHistory(book=book, user=user, last_page=last_page)
+            reading_history.save()
+            message = 'Reading history created successfully'
+
+        return JsonResponse({'message': message}, status=200)
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+    
+# View DELETE untuk delete data yang tersimpan di JSON pada flutter
+@csrf_exempt
+def delete_reading_history(request, history_id):
+    if request.method == 'DELETE':
+        # Retrieve the reading history
+        try:
+            reading_history = ReadingHistory.objects.get(pk=history_id)
+        except ReadingHistory.DoesNotExist:
+            return HttpResponseBadRequest('Invalid history ID')
+
+        # Delete the reading history
+        reading_history.delete()
+
+        return JsonResponse({'message': 'Reading history deleted successfully'})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
 
 # def reading_history(request, pk):
 #     current_user = User.objects.get(pk=pk)
