@@ -51,10 +51,6 @@ def create_review(request):
     context = {'form': form}
     return render(request, "create_review.html", context)
 
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.utils import timezone
-
 def format_time_difference(timestamp):
     time_difference = timezone.now() - timestamp
     if time_difference.days > 0:
@@ -114,6 +110,28 @@ def commenting(request, book_id):
 
     return JsonResponse(response_data)
 
+def get_all_reviews(request):
+    if request.method == 'GET':
+        # Retrieve all reviews
+        reviews = Review.objects.all()
+
+        # Create a list of dictionaries for the JSON response
+        reviews_list = []
+        for review in reviews:
+            reviews_list.append({
+                'id': review.id,
+                'book_id': review.book.id,
+                'username': review.user.user.username,
+                'comment': review.comment,
+                'rating': review.rating,
+                'timestamp': review.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                # Format the timestamp as you prefer
+            })
+
+        return JsonResponse({'reviews': reviews_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
 @csrf_exempt
 def get_book_reviews(request, book_id):
     if request.method == 'GET':
@@ -125,13 +143,17 @@ def get_book_reviews(request, book_id):
         reviews_list = []
         for review in reviews:
             reviews_list.append({
+                'id': review.id,  # Include the review's ID
                 'username': review.user.user.username,
                 'comment': review.comment,
                 'timestamp': format_time_difference(review.timestamp),
                 'rating': review.rating,
             })
 
-        return JsonResponse({'book_id': book.id, 'reviews': reviews_list})
+        # Get the count of reviews
+        reviews_count = len(reviews_list)
+
+        return JsonResponse({'book_id': book.id, 'reviews': reviews_list, 'reviews_count': reviews_count})
     else:
         return HttpResponseBadRequest('Invalid request method')
 
@@ -170,29 +192,47 @@ def post_book_review(request, book_id):
         return HttpResponseBadRequest('Invalid request method')
 
 
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib.auth.decorators import login_required
+@csrf_exempt
+def delete_book_review(request, review_id):
+    if request.method == 'DELETE':
+        # Retrieve the review
+        try:
+            review = Review.objects.get(pk=review_id)
+        except Review.DoesNotExist:
+            return HttpResponseBadRequest('Invalid review ID')
 
-@login_required
-def like_review(request, review_id):
-    review = get_object_or_404(Review, pk=review_id)
-    user_profile = UserProfile.objects.get(user=request.user)
+        # Delete the review
+        review.delete()
 
-    if request.method == 'POST':
-        # Check if the user has already liked the review
-        if not CommentLike.objects.filter(review=review, user=user_profile).exists():
-            like_instance = CommentLike.objects.create(review=review, user=user_profile)
+        reviews_count = Review.objects.all().count()
 
-            response_data = {
-                'message': 'Review liked successfully.',
-                'review_id': review.id,
-                'like_id': like_instance.id,
-            }
-
-            return JsonResponse(response_data)
-        else:
-            return HttpResponseBadRequest('You have already liked this review.')
+        return JsonResponse({'message': 'Review deleted successfully', 'reviews_count': reviews_count}, status=200)
     else:
         return HttpResponseBadRequest('Invalid request method')
+
+# from django.shortcuts import get_object_or_404
+# from django.http import JsonResponse, HttpResponseBadRequest
+# from django.contrib.auth.decorators import login_required
+
+# @login_required
+# def like_review(request, review_id):
+#     review = get_object_or_404(Review, pk=review_id)
+#     user_profile = UserProfile.objects.get(user=request.user)
+
+#     if request.method == 'POST':
+#         # Check if the user has already liked the review
+#         if not CommentLike.objects.filter(review=review, user=user_profile).exists():
+#             like_instance = CommentLike.objects.create(review=review, user=user_profile)
+
+#             response_data = {
+#                 'message': 'Review liked successfully.',
+#                 'review_id': review.id,
+#                 'like_id': like_instance.id,
+#             }
+
+#             return JsonResponse(response_data)
+#         else:
+#             return HttpResponseBadRequest('You have already liked this review.')
+#     else:
+#         return HttpResponseBadRequest('Invalid request method')
    
