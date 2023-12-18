@@ -114,6 +114,28 @@ def commenting(request, book_id):
 
     return JsonResponse(response_data)
 
+def get_all_reviews(request):
+    if request.method == 'GET':
+        # Retrieve all reviews
+        reviews = Review.objects.all()
+
+        # Create a list of dictionaries for the JSON response
+        reviews_list = []
+        for review in reviews:
+            reviews_list.append({
+                'id': review.id,
+                'book_id': review.book.id,
+                'username': review.user.user.username,
+                'comment': review.comment,
+                'rating': review.rating,
+                'timestamp': review.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                # Format the timestamp as you prefer
+            })
+
+        return JsonResponse({'reviews': reviews_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
 @csrf_exempt
 def get_book_reviews(request, book_id):
     if request.method == 'GET':
@@ -125,13 +147,17 @@ def get_book_reviews(request, book_id):
         reviews_list = []
         for review in reviews:
             reviews_list.append({
+                'id': review.id,  # Include the review's ID
                 'username': review.user.user.username,
                 'comment': review.comment,
                 'timestamp': format_time_difference(review.timestamp),
                 'rating': review.rating,
             })
 
-        return JsonResponse({'book_id': book.id, 'reviews': reviews_list})
+        # Get the count of reviews
+        reviews_count = len(reviews_list)
+
+        return JsonResponse({'book_id': book.id, 'reviews': reviews_list, 'reviews_count': reviews_count})
     else:
         return HttpResponseBadRequest('Invalid request method')
 
@@ -169,6 +195,24 @@ def post_book_review(request, book_id):
     else:
         return HttpResponseBadRequest('Invalid request method')
 
+
+@csrf_exempt
+def delete_book_review(request, review_id):
+    if request.method == 'DELETE':
+        # Retrieve the review
+        try:
+            review = Review.objects.get(pk=review_id)
+        except Review.DoesNotExist:
+            return HttpResponseBadRequest('Invalid review ID')
+
+        # Delete the review
+        review.delete()
+
+        reviews_count = Review.objects.all().count()
+
+        return JsonResponse({'message': 'Review deleted successfully', 'reviews_count': reviews_count}, status=200)
+    else:
+        return HttpResponseBadRequest('Invalid request method')
 
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest
