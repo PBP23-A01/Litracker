@@ -51,10 +51,6 @@ def create_review(request):
     context = {'form': form}
     return render(request, "create_review.html", context)
 
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.utils import timezone
-
 def format_time_difference(timestamp):
     time_difference = timezone.now() - timestamp
     if time_difference.days > 0:
@@ -214,29 +210,29 @@ def delete_book_review(request, review_id):
     else:
         return HttpResponseBadRequest('Invalid request method')
 
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib.auth.decorators import login_required
+# from django.shortcuts import get_object_or_404
+# from django.http import JsonResponse, HttpResponseBadRequest
+# from django.contrib.auth.decorators import login_required
 
-@login_required
-def like_review(request, review_id):
-    review = get_object_or_404(Review, pk=review_id)
-    user_profile = UserProfile.objects.get(user=request.user)
+# @login_required
+# def like_review(request, review_id):
+#     review = get_object_or_404(Review, pk=review_id)
+#     user_profile = UserProfile.objects.get(user=request.user)
 
-    if request.method == 'POST':
-        # Check if the user has already liked the review
-        if not CommentLike.objects.filter(review=review, user=user_profile).exists():
-            like_instance = CommentLike.objects.create(review=review, user=user_profile)
+#     if request.method == 'POST':
+#         # Check if the user has already liked the review
+#         if not CommentLike.objects.filter(review=review, user=user_profile).exists():
+#             like_instance = CommentLike.objects.create(review=review, user=user_profile)
 
-            response_data = {
-                'message': 'Review liked successfully.',
-                'review_id': review.id,
-                'like_id': like_instance.id,
-            }
+#             response_data = {
+#                 'message': 'Review liked successfully.',
+#                 'review_id': review.id,
+#                 'like_id': like_instance.id,
+#             }
 
-            return JsonResponse(response_data)
-        else:
-            return HttpResponseBadRequest('You have already liked this review.')
-    else:
-        return HttpResponseBadRequest('Invalid request method')
+#             return JsonResponse(response_data)
+#         else:
+#             return HttpResponseBadRequest('You have already liked this review.')
+#     else:
+#         return HttpResponseBadRequest('Invalid request method')
    
