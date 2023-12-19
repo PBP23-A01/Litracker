@@ -133,7 +133,7 @@ def admin_login(request):
     password = request.POST['password']
     user = authenticate(username=username, password=password)
     if user is not None:
-        if user.is_active and user.is_superuser:
+        if user.is_active and user.is_staff:
             login(request, user)
             # Status login sukses.
             return JsonResponse({
