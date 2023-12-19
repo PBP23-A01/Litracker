@@ -166,36 +166,60 @@ def get_upvoting_users(request, book_id):
         return HttpResponseBadRequest('Invalid request method')
     
 
-# Buku apa saja yang user upvote berapa jumlah buku yang telah user upvote?
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 @csrf_exempt
+@login_required  # Use the login_required decorator to ensure the user is authenticated
 def get_upvoted_books(request):
-    user_profile = UserProfile.objects.get(user=request.user)
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest('User is not authenticated')
+
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        return HttpResponseBadRequest('UserProfile not found for the authenticated user')
 
     if request.method == 'GET':
         upvoted_books = Vote.objects.filter(user=user_profile)
         books_list = []
         for vote in upvoted_books:
             book_instance = vote.book
+            upvoting_users = Vote.objects.filter(book=book_instance)
             book_info = {
-                'model': 'book.book',
-                'pk': book_instance.id,
-                'fields': {
-                    'isbn': book_instance.isbn,
-                    'title': book_instance.title,
-                    'author': book_instance.author,
-                    'published_year': book_instance.published_year,
-                    'publisher': book_instance.publisher,  # Add the publisher field if available
-                    'image_url_s': book_instance.image_url_s,
-                    'image_url_m': book_instance.image_url_m,
-                    'image_url_l': book_instance.image_url_l,
-                    # Add other relevant book information
-                }
+                'id': book_instance.id,
+                'isbn': book_instance.isbn,
+                'title': book_instance.title,
+                'author': book_instance.author,
+                'published_year': book_instance.published_year,
+                'publisher': book_instance.publisher,
+                'image_url_s': book_instance.image_url_s,
+                'image_url_m': book_instance.image_url_m,
+                'image_url_l': book_instance.image_url_l,
+                'total_upvote_thisbook': upvoting_users.count()
             }
             books_list.append(book_info)
-            
+
         total_upvoted_books = len(upvoted_books)
 
-        return JsonResponse({'total_upvoted_books': total_upvoted_books, 'upvoted_books': books_list, }, json_dumps_params={'indent': 2})
-        # return JsonResponse({'total_upvoted_books':total_upvoted_books},safe=False)
+        return JsonResponse({'total_upvoted_books': total_upvoted_books, 'upvoted_books': books_list}, json_dumps_params={'indent': 2})
     else:
         return HttpResponseBadRequest('Invalid request method')
+
+
+# from django.http import JsonResponse, HttpResponseBadRequest
+# from django.shortcuts import get_object_or_404
+
+# @csrf_exempt
+# def unvote_flutter(request, book_id):
+#     book_instance = get_object_or_404(Book, pk=book_id)
+#     user_profile = UserProfile.objects.get(user=request.user)
+
+#     if request.method == 'POST':
+#         vote = Vote.objects.get(user=user_profile, book=book_instance)
+#         vote.delete()
+#         message = 'Unvoted'
+#         return JsonResponse({'message': message})
+
+#     return HttpResponseBadRequest('Invalid request method')

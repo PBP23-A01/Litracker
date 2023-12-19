@@ -153,4 +153,4 @@ CSRF_TRUSTED_ORIGINS = ["https://litracker-a01-tk.pbp.cs.ui.ac.id",
                         'http://localhost:8080',]
 
 # kalau belum login tapi akses home akan redirect ke guest page
-LOGIN_URL = 'authentication:index' 
+# LOGIN_URL = 'authentication:index' 
