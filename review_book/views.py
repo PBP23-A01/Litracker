@@ -235,4 +235,132 @@ def delete_book_review(request, review_id):
 #             return HttpResponseBadRequest('You have already liked this review.')
 #     else:
 #         return HttpResponseBadRequest('Invalid request method')
-   
+
+
+from django.db.models import Avg, IntegerField
+from django.db.models.functions import Coalesce
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.utils import timezone
+
+from django.utils import timezone
+from datetime import datetime
+
+def format_time_difference(timestamp):
+    if timestamp is None:
+        return "Tidak ada data upvote terakhir"  # or any default value you prefer for cases where the timestamp is None
+
+    if not isinstance(timestamp, datetime):
+        # Parse the timestamp string into a datetime object
+        timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+
+    # Make the timestamp aware
+    timestamp = timezone.make_aware(timestamp)
+
+    time_difference = timezone.now() - timestamp
+    if time_difference.days > 0:
+        return f"{time_difference.days} h yang lalu"
+    elif time_difference.seconds >= 3600:
+        hours, remainder = divmod(time_difference.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{int(hours)} j {int(minutes)} m {int(seconds)} d yang lalu"
+    elif time_difference.seconds >= 60:
+        minutes, seconds = divmod(time_difference.seconds, 60)
+        return f"{int(minutes)} m {int(seconds)} d yang lalu"
+    else:
+        return f"{int(time_difference.seconds)} d yang lalu"
+    
+
+def get_snippet_reviews_without_rating(request):
+    if request.method == 'GET':
+        # Retrieve all reviews
+        reviews = Review.objects.all()
+
+        # Create a dictionary to store reviews for each book
+        book_reviews = {}
+
+        # Aggregate reviews for each book
+        for review in reviews:
+            book_id = review.book.id
+            if book_id not in book_reviews:
+                book_reviews[book_id] = {
+                    'id': book_id,
+                    'title': review.book.title,  # Assuming Book model has a 'title' field
+                    'reviews': [],
+                }
+
+            # Append review details to the book's reviews list
+            book_reviews[book_id]['reviews'].append({
+                'id': review.id,
+                'username': review.user.user.username,
+                'comment': review.comment,
+                'timestamp': review.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            })
+
+        # Process the aggregated reviews for each book
+        final_reviews_list = []
+        for book_id, book_data in book_reviews.items():
+            # Limit the number of reviews to 3
+            book_data['reviews'] = book_data['reviews'][:3]
+
+            # Get the latest timestamp among the three most recent reviews
+            latest_timestamp = max(book_data['reviews'], key=lambda r: r['timestamp'])['timestamp']
+
+            # Format the latest timestamp using the provided function
+            book_data['formatted_timestamp'] = format_time_difference(latest_timestamp)
+
+            final_reviews_list.append(book_data)
+
+        # Sort the final reviews list based on the latest timestamp in each book's reviews
+        final_reviews_list.sort(key=lambda x: max(x['reviews'], key=lambda r: r['timestamp'])['timestamp'], reverse=True)
+
+        return JsonResponse({'reviews': final_reviews_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+    
+def get_snippet_reviews_without_timestamp(request):
+    if request.method == 'GET':
+        # Retrieve all reviews
+        reviews = Review.objects.all()
+
+        # Create a dictionary to store reviews for each book
+        book_reviews = {}
+
+        # Aggregate reviews for each book
+        for review in reviews:
+            book_id = review.book.id
+            if book_id not in book_reviews:
+                book_reviews[book_id] = {
+                    'id': book_id,
+                    'title': review.book.title,  # Assuming Book model has a 'title' field
+                    'reviews': [],
+                }
+
+            # Append review details to the book's reviews list
+            book_reviews[book_id]['reviews'].append({
+                'id': review.id,
+                'username': review.user.user.username,
+                'comment': review.comment,
+                'rating': review.rating,
+            })
+
+        # Process the aggregated reviews for each book
+        final_reviews_list = []
+        for book_id, book_data in book_reviews.items():
+            # Limit the number of reviews to 3
+            book_data['reviews'] = book_data['reviews'][:3]
+
+            # Calculate the average rating for the book
+            avg_rating = Review.objects.filter(book_id=book_id).aggregate(avg_rating=Coalesce(Avg('rating'), 0, output_field=IntegerField()))['avg_rating']
+
+            # Add average rating to the book's data
+            book_data['average_rating'] = avg_rating
+
+            final_reviews_list.append(book_data)
+
+        # Sort the final reviews list based on the latest timestamp in each book's reviews
+            final_reviews_list.sort(key=lambda x: max(x['reviews'], key=lambda r: r['id'])['id'], reverse=True)
+
+
+        return JsonResponse({'reviews': final_reviews_list})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
