@@ -1,6 +1,7 @@
 from django.urls import path
 from review_book.views import delete_book_review, get_all_reviews, show_review, add_review, add_review_ajax, \
-    create_review, get_book_reviews, post_book_review, get_snippet_reviews_without_rating, get_snippet_reviews_without_timestamp
+    create_review, get_book_reviews, post_book_review, \
+ get_snippet_reviews_without_rating, get_snippet_reviews_without_timestamp
 
 app_name = 'review_book'
 

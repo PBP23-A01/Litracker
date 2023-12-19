@@ -51,7 +51,7 @@ def create_review(request):
     context = {'form': form}
     return render(request, "create_review.html", context)
 
-def format_time_difference(timestamp):
+def format_time_differences(timestamp):
     time_difference = timezone.now() - timestamp
     if time_difference.days > 0:
         return f"{time_difference.days} h yang lalu"
@@ -146,7 +146,7 @@ def get_book_reviews(request, book_id):
                 'id': review.id,  # Include the review's ID
                 'username': review.user.user.username,
                 'comment': review.comment,
-                'timestamp': format_time_difference(review.timestamp),
+                'timestamp': format_time_differences(review.timestamp),
                 'rating': review.rating,
             })
 
