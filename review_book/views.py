@@ -270,6 +270,11 @@ def format_time_difference(timestamp):
         return f"{int(time_difference.seconds)} d yang lalu"
     
 
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.db.models import Avg, IntegerField
+from django.db.models.functions import Coalesce
+from django.utils import timezone
+
 def get_snippet_reviews_without_rating(request):
     if request.method == 'GET':
         # Retrieve all reviews
@@ -284,7 +289,9 @@ def get_snippet_reviews_without_rating(request):
             if book_id not in book_reviews:
                 book_reviews[book_id] = {
                     'id': book_id,
-                    'title': review.book.title,  # Assuming Book model has a 'title' field
+                    'title': review.book.title,
+                    'author': review.book.author,
+                    'image': review.book.image_url_l,
                     'reviews': [],
                 }
 
@@ -293,7 +300,7 @@ def get_snippet_reviews_without_rating(request):
                 'id': review.id,
                 'username': review.user.user.username,
                 'comment': review.comment,
-                'timestamp': review.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'timestamp': review.timestamp,  # Use the datetime object directly
             })
 
         # Process the aggregated reviews for each book
@@ -305,8 +312,11 @@ def get_snippet_reviews_without_rating(request):
             # Get the latest timestamp among the three most recent reviews
             latest_timestamp = max(book_data['reviews'], key=lambda r: r['timestamp'])['timestamp']
 
-            # Format the latest timestamp using the provided function
-            book_data['formatted_timestamp'] = format_time_difference(latest_timestamp)
+            # Format the latest timestamp as a string
+            latest_timestamp_str = latest_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+            # Add the formatted timestamp to the book's data
+            book_data['formatted_timestamp'] = format_time_difference(latest_timestamp_str)
 
             final_reviews_list.append(book_data)
 
@@ -316,7 +326,7 @@ def get_snippet_reviews_without_rating(request):
         return JsonResponse({'reviews': final_reviews_list})
     else:
         return HttpResponseBadRequest('Invalid request method')
-    
+
 def get_snippet_reviews_without_timestamp(request):
     if request.method == 'GET':
         # Retrieve all reviews
@@ -332,6 +342,8 @@ def get_snippet_reviews_without_timestamp(request):
                 book_reviews[book_id] = {
                     'id': book_id,
                     'title': review.book.title,  # Assuming Book model has a 'title' field
+                    'author': review.book.author,
+                    'image': review.book.image_url_l,
                     'reviews': [],
                 }
 

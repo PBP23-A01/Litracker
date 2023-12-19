@@ -84,10 +84,11 @@ def show_history(request):
     return render(request,'history_book.html',context)
 
 # GET semua reading history dari semua buku, bisa untuk liat data JSON di web
+@csrf_exempt
 def get_all_reading_histories(request):
     if request.method == 'GET':
-        # Retrieve all reading histories
-        reading_histories = ReadingHistory.objects.all()
+        # Retrieve all reading histories with related book information
+        reading_histories = ReadingHistory.objects.select_related('book', 'user__user').all()
 
         # Create a list of dictionaries for the JSON response
         reading_histories_list = []
@@ -95,12 +96,14 @@ def get_all_reading_histories(request):
             reading_histories_list.append({
                 'id': history.id,
                 'book_id': history.book.pk,
+                'book_title': history.book.title,  # Add book title
+                'book_author': history.book.author,  # Add book author
                 'username': history.user.user.username,
                 'last_page': history.last_page,
                 'date_opened': history.date_opened.strftime('%Y-%m-%d'),
             })
 
-        return JsonResponse({'reading_histories': reading_histories_list})
+        return JsonResponse({'reading_histories': reading_histories_list, 'total_on_reading': len(reading_histories_list),})
     else:
         return HttpResponseBadRequest('Invalid request method')
 
@@ -122,7 +125,7 @@ def get_reading_history(request, book_id):
                 'date_opened': history.date_opened.strftime('%Y-%m-%d'),
             })
 
-        return JsonResponse({'book_id': book.id, 'reading_histories': reading_histories_list})
+        return JsonResponse({'book_id': book.id,  'reading_histories': reading_histories_list})
     else:
         return HttpResponseBadRequest('Invalid request method')
 
