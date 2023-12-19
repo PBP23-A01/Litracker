@@ -1,5 +1,5 @@
 from django.urls import path
-from reading_history.views import history_book, show_history, fetch_history, get_all_reading_histories, get_reading_history, post_reading_history
+from reading_history.views import delete_reading_history, history_book, show_history, fetch_history, get_all_reading_histories, get_reading_history, post_reading_history
 
 app_name = 'reading_history'
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('get_all_reading_history/', get_all_reading_histories, name='get_all_reading_histories'),
     path('get_reading_history/<int:book_id>', get_reading_history, name='get_reading_history'),
     path('post_reading_history/<int:book_id>', post_reading_history, name='post_reading_history'),
+    path('delete_reading_history/<int:history_id>/', delete_reading_history, name='delete_reading_history'),
 ]
