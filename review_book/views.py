@@ -370,7 +370,7 @@ def get_snippet_reviews_without_timestamp(request):
             final_reviews_list.append(book_data)
 
         # Sort the final reviews list based on the latest timestamp in each book's reviews
-            final_reviews_list.sort(key=lambda x: max(x['reviews'], key=lambda r: r['id'])['id'], reverse=True)
+            final_reviews_list.sort(key=lambda x: x['average_rating'], reverse=True)
 
 
         return JsonResponse({'reviews': final_reviews_list})
