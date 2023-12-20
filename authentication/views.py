@@ -124,7 +124,7 @@ def mobile_login(request):
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login gagal, periksa kembali email atau kata sandi."
+            "message": "Email atau kata sandi salah!"
         }, status=401)
     
 @csrf_exempt
@@ -145,13 +145,13 @@ def admin_login(request):
         else:
             return JsonResponse({
                 "status": False,
-                "message": "Login gagal, akun bukan admin atau dinonaktifkan."
+                "message": "Login gagal."
             }, status=401)
 
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login gagal, periksa kembali email atau kata sandi."
+            "message": "Email atau kata sandi salah!"
         }, status=401)
 
 @csrf_exempt
@@ -178,9 +178,9 @@ def register_mobile(request):
     password = request.POST.get('password')
 
     if User.objects.filter(username=username).exists():
-        return JsonResponse({"status": False, "message": "Username already used."}, status=400)
+        return JsonResponse({"status": False, "message": "Username sudah terdaftar!"}, status=400)
 
     user = User.objects.create_user(username=username, password=password)
     user.save()
 
-    return JsonResponse({"username": user.username, "status": True, "message": "Register successful!"}, status=201)
+    return JsonResponse({"username": user.username, "status": True, "message": "Registrasi Sukses!"}, status=201)

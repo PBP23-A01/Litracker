@@ -173,21 +173,32 @@ def post_reading_history(request, book_id):
         return HttpResponseBadRequest('Invalid request method')
     
 # View DELETE untuk delete data yang tersimpan di JSON pada flutter
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
+@login_required
 @csrf_exempt
-def delete_reading_history(request, history_id):
-    if request.method == 'DELETE':
-        # Retrieve the reading history
-        try:
-            reading_history = ReadingHistory.objects.get(pk=history_id)
-        except ReadingHistory.DoesNotExist:
-            return HttpResponseBadRequest('Invalid history ID')
+def delete_reading_history(request, book_id):
+    # Assuming book_id is the ID of the book whose reading history entry you want to delete
+    book = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    history_entry = get_object_or_404(ReadingHistory, user=user_profile, book=book)
+    
+    if request.method == 'POST':
+        # Check if the reading history entry belongs to the user
+        if history_entry.user == user_profile:
+            # Delete the reading history entry
+            history_entry.delete()
+            message = 'Reading history deleted successfully'
+        else:
+            message = 'You do not have permission to delete this reading history entry'
 
-        # Delete the reading history
-        reading_history.delete()
-
-        return JsonResponse({'message': 'Reading history deleted successfully'})
+        return JsonResponse({'message': message})
     else:
         return HttpResponseBadRequest('Invalid request method')
+
 
 # def reading_history(request, pk):
 #     current_user = User.objects.get(pk=pk)
