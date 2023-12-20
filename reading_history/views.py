@@ -107,6 +107,23 @@ def get_all_reading_histories(request):
     else:
         return HttpResponseBadRequest('Invalid request method')
 
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+@login_required
+@csrf_exempt
+def is_submitted(request, book_id):
+    if request.method == 'GET':
+
+        user_profile = UserProfile.objects.get(user=request.user)
+        book = Book.objects.get(pk=book_id)
+        # Check if there is a reading history entry for the specified book and user
+        is_submitted = ReadingHistory.objects.filter(book=book, user=user_profile).exists()
+
+        return JsonResponse({'is_submitted': is_submitted})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+
+
 # GET reading history dari buku buat nanti di filternya di flutter
 @csrf_exempt
 def get_reading_history(request, book_id):
