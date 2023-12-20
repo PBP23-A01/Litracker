@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from sympy import Sum
+from book.models import Book
 from favorite_book.models import WishlistBook
 from authentication.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def favorite_book(request):
@@ -21,7 +23,64 @@ def get_total_wishlist(request):
     return JsonResponse({'total_wishlist': total_wishlist})
 
 
+@csrf_exempt
+def toggle_wishlist_flutter(request, book_id):
+    book_instance = get_object_or_404(Book, pk=book_id)
+    user_profile = UserProfile.objects.get(user=request.user)
 
+    if request.method == 'POST':
+        # Check if the user has already voted for the book
+        wishlist, created = WishlistBook.objects.get_or_create(user=user_profile, book=book_instance)
+
+        
+
+        if created:
+            message = 'Wishlisted'
+        else:
+            # If the user has already voted, delete the vote (unvote)
+            wishlist.delete()
+            message = 'Unwishlisted'
+
+        total_wishlists = WishlistBook.objects.filter(book=book_instance, user=user_profile).count()
+
+
+        return JsonResponse({'message': message, 'total_wishlists': total_wishlists})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+    
+@csrf_exempt
+def get_wishlisting_users(request, book_id):
+    book_instance = get_object_or_404(Book, pk=book_id)
+
+    if request.method == 'GET':
+        wishlisting_users = WishlistBook.objects.filter(book=book_instance)
+
+        user_list = [wishlist.user.user.username for wishlist in wishlisting_users]
+
+        user_profile = UserProfile.objects.get(user=request.user)
+        is_user_in_list_orWishlistThisBook = user_profile.user.username in user_list
+        
+        book_info = {
+            'model': 'book.book',
+            'pk': book_instance.id,
+            'fields': {
+                'isbn': book_instance.isbn,
+                'title': book_instance.title,
+                'author': book_instance.author,
+                'published_year': book_instance.published_year,
+                'publisher': book_instance.publisher, 
+                'image_url_s': book_instance.image_url_s,
+                'image_url_m': book_instance.image_url_m,
+                'image_url_l': book_instance.image_url_l,
+                # Add other relevant book information
+            }
+        }
+
+        return JsonResponse({'upvoting_users': user_list, 'total_users_wishlist': wishlisting_users.count(), 'book': book_info, 'isWishlist': is_user_in_list_orWishlistThisBook})
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+    
+    
 
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
