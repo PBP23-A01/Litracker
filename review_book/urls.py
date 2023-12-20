@@ -1,8 +1,7 @@
 from django.urls import path
 from review_book.views import delete_book_review, get_all_reviews, show_review, add_review, add_review_ajax, \
     create_review, get_book_reviews, post_book_review, \
- get_snippet_reviews_without_rating, get_snippet_reviews_without_timestamp
-
+ get_snippet_reviews_without_rating, get_snippet_reviews_without_timestamp, get_total_rating
 app_name = 'review_book'
 
 urlpatterns = [
@@ -16,5 +15,6 @@ urlpatterns = [
     path('delete_book_reviews/<int:review_id>/', delete_book_review, name='delete_book_reviews'),
     path('get_snippet_reviews_without_rating', get_snippet_reviews_without_rating, name='get_snippet_reviews_without_rating'),
     path('get_snippet_reviews_without_timestamp', get_snippet_reviews_without_timestamp, name='get_snippet_reviews_without_timestamp'),
+    path('get_total_rating/<int:book_id>/', get_total_rating, name='get_total_rating'),
     
 ]

@@ -376,3 +376,36 @@ def get_snippet_reviews_without_timestamp(request):
         return JsonResponse({'reviews': final_reviews_list})
     else:
         return HttpResponseBadRequest('Invalid request method')
+
+from django.db.models import Avg, IntegerField
+def get_total_rating(request, book_id):
+    if request.method == 'GET':
+        # Check if a specific book is requested
+        if book_id:
+            # Retrieve the specified book
+            book = get_object_or_404(Book, id=book_id)
+            avg_rating = Review.objects.filter(book=book).aggregate(
+                avg_rating=Coalesce(Avg('rating'), 0, output_field=IntegerField())
+            )['avg_rating']
+            
+            # Return the average rating for the specific book
+            return JsonResponse({'book_id': book_id, 'average_rating': avg_rating})
+        else:
+            # Retrieve all books' average ratings
+            books = Book.objects.all()
+            book_avg_ratings = {}
+            
+            for book in books:
+                avg_rating = Review.objects.filter(book=book).aggregate(
+                    avg_rating=Coalesce(Avg('rating'), 0, output_field=IntegerField())
+                )['avg_rating']
+                
+                book_avg_ratings[book.id] = avg_rating
+            
+            # Return average ratings for all books
+            return JsonResponse([
+                {'book_id': book_id, 'average_rating': avg_rating}
+                for book_id, avg_rating in book_avg_ratings.items()
+            ], safe=False)
+    else:
+        return HttpResponseBadRequest('Invalid request method')
